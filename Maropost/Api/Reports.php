@@ -31,7 +31,7 @@ class Reports
      * @param array $params
      * @return GetResult
      */
-    public function get(string $resource = null, array $params = []) : GetResult
+    private function get(string $resource = null, array $params = []) : GetResult
     {
 
         try {
@@ -49,6 +49,15 @@ class Reports
         }
 
         return new GetResult($this->apiResponse);
+    }
+
+    public function getOpens(array $params = [])
+    {
+        try {
+            return $this->get('opens', $params);
+        } catch (\Exception $e) {
+            die('exception ');
+        }
     }
 
 }
