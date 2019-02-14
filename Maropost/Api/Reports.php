@@ -26,12 +26,85 @@ class Reports
 		$this->resource = 'reports';
 	}
 
+	public function get($params) : GetResult
+    {
+        try {
+            return $this->_get('', $params);
+        } catch (\Exception $e) {
+            die('exception ');
+        }
+    }
+
+    public function getOpens(array $params = []) : GetResult
+    {
+        try {
+            return $this->_get('opens', $params);
+        } catch (\Exception $e) {
+            die('exception ');
+        }
+    }
+
+    public function getClicks(array $params = []) : GetResult
+    {
+        try {
+            return $this->_get('clicks', $params);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public function getBounces(array $params = []) : GetResult
+    {
+        try {
+            return $this->_get('bounces', $params);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public function getUnsubscribes(array $params = []) : GetResult
+    {
+        try {
+            return $this->_get('unsubscribes', $params);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public function getComplaints(array $params = []) : GetResult
+    {
+        try {
+            return $this->_get('complaints', $params);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public function getAbReports(array $params = []) : GetResult
+    {
+        try {
+            $this->resource = 'ab_reports';
+            return $this->_get('', $params);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    public function getJourneys(array $params = []) : GetResult
+    {
+        try {
+            return $this->_get('journeys', $params);
+        } catch (\Exception $e) {
+
+        }
+    }
+
     /**
      * @param string|null $resource
      * @param array $params
      * @return GetResult
      */
-    private function get(string $resource = null, array $params = []) : GetResult
+    private function _get(string $resource = null, array $params = []) : GetResult
     {
 
         try {
@@ -41,7 +114,7 @@ class Reports
             // be explicit about json format
             $url .= '.json';
             $url .= $this->getQueryString($params);
-
+echo "calling {$url}\n";
             $this->apiResponse = Request::get($url)->send();
 
         } catch (\Exception $e) {
@@ -49,15 +122,6 @@ class Reports
         }
 
         return new GetResult($this->apiResponse);
-    }
-
-    public function getOpens(array $params = [])
-    {
-        try {
-            return $this->get('opens', $params);
-        } catch (\Exception $e) {
-            die('exception ');
-        }
     }
 
 }
