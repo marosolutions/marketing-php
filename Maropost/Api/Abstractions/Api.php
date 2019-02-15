@@ -26,7 +26,7 @@ trait Api {
     /**
      * @var
      */
-    private $rescource;
+    private $resource;
 
     /**
      * @param $keyValuePairs
