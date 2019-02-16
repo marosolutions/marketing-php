@@ -4,7 +4,7 @@ namespace Maropost\Api;
 
 use Httpful\Request;
 use Maropost\Api\Abstractions\Api;
-use Maropost\Api\ResultTypes\Reports\GetResult;
+use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\OperationResult;
 
 class TransactionalCampaigns

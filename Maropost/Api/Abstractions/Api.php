@@ -53,4 +53,41 @@ trait Api {
 
         return $url;
     }
+
+    private function _discardNullAndEmptyValues(array $params) : array
+    {
+        $transformedArray = [];
+        foreach ($params as $key => $value) {
+            if (!empty($value)) {
+                $transformedArray[$key] = $value;
+            }
+        }
+
+        return $transformedArray;
+    }
+
+    /**
+     * @param string|null $resource
+     * @param array $params
+     * @return GetResult
+     */
+    private function _get(string $resource = null, array $params = []): GetResult
+    {
+
+        try {
+            $url = $this->url();
+            $url .= !empty($resource) ? '/' . $resource : '';
+
+            // be explicit about json format
+            $url .= '.json';
+            $url .= $this->getQueryString($params);
+
+            $this->apiResponse = Request::get($url)->send();
+
+        } catch (\Exception $e) {
+
+        }
+
+        return new GetResult($this->apiResponse);
+    }
 }

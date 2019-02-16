@@ -2,7 +2,7 @@
 
 namespace Maropost\Api;
 
-use Maropost\Api\ResultTypes\Reports\GetResult;
+use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\Api;
 use Maropost\Api\Abstractions\OperationResult;
 use Httpful\Request;
