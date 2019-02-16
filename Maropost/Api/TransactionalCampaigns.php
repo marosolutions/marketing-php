@@ -11,9 +11,9 @@ class TransactionalCampaigns
 {
     use Api;
 
-	public function __construct($accountId, $authStr)
+	public function __construct($accountId, $authToken)
 	{
-		$this->auth_token = $authStr;
+		$this->auth_token = $authToken;
 		$this->accountId = $accountId;
         $this->resource = 'transactional_campaigns';
 	}
@@ -84,124 +84,152 @@ class TransactionalCampaigns
      * Sends a transactional campaign email to a recipient. Sender's information will be automatically fetched from the
      * transactional campaign, unless provided in the function arguments.
      *
-     * @param int $campaignId must be a campaign that exists when you call .get()
-     * @param int $contentId If provided, the transactional campaign's content will be replaced by this content.
-     * @param string $contentName If $contentId is null, the transactional campaign's content name will be replaced by this name.
-     * @param string $contentHtmlPart If $contentId is null, the transactional campaign's content HTML part will be replaced by this HTML part.
-     * @param string $contentTextPart If $contentId is null, the transactional campaign's content Text part will be replaced by this Text part.
-     * @param int $sendAtHour Must be 1-12. Otherwise the email will go out immediately. If the hour is less than the current hour, the email will go out the following day.
-     * @param int $sendAtMinute Must be 0-60. Otherwise will be treated as 0. If the hour and minute combine to less than the current time, the email will go out the following day.
+     * @param int $campaignId must be a campaign that already exists when you call ->get(). If you don't have one, first call ->create().
+     * @param int|null $contentId If provided, the transactional campaign's content will be replaced by this content.
+     * @param string|null $contentName If $contentId is null, the transactional campaign's content name will be replaced by this name.
+     * @param string|null $contentHtmlPart If $contentId is null, the transactional campaign's content HTML part will be replaced by this HTML part.
+     * @param string|null $contentTextPart If $contentId is null, the transactional campaign's content Text part will be replaced by this Text part.
+     * @param int|null $sendAtHour Must be 1-12. Otherwise the email will go out immediately. If the hour is less than the current hour, the email will go out the following day.
+     * @param int|null $sendAtMinute Must be 0-60. Otherwise will be treated as 0. If the hour and minute combine to less than the current time, the email will go out the following day.
      * @param bool $ignoreDnm If true, ignores the Do Not Mail list for the recipient contact.
-     * @param int $contactId contact ID of the recipient.
-     * @param string $recipientEmail email address. Ignored if $contactId > 0.
-     * @param string $recipientFirstName recipient's first name. Ignored if $contactId > 0.
-     * @param string $recipientLastName recipient's last name. Ignored if $contactId > 0.
-     * @param string $bccEmail BCC recipient. May only pass a single email address, or empty string.
-     * @param string $fromName sender's name. If $fromEmail is set, it overrides the transactional campaign default sender name. Ignored otherwise.
-     * @param string $fromEmail sender's email address. Overrides the transactional campaign default sender email.
-     * @param string $subject subject line of email. Overrides the transactional campaign default subject.
-     * @param string $replyTo reply-to address. Overrides the transactional campaign default reply-to.
-     * @param string $senderAddress physical address of sender. Overrides the transactional campaign default sender address.
-     * @param array $tags a list of key/value pair objects where the key is the name of the tag within the content, and the value is the tag's replacement upon sending.
-     * @param string ...$ctags array of campaign tags.
-     * @return OperationResult
+     * @param int|null $contactId contact ID of the recipient.
+     * @param string|null $recipientEmail email address. Ignored unless $contactId is null. Otherwise, it must be a well-formed email address according to FILTER_VALIDATE_EMAIL.
+     * @param string|null $recipientFirstName recipient's first name. Ignored unless $contactId is null.
+     * @param string|null $recipientLastName recipient's last name. Ignored unless $contactId is null.
+     * @param array|null $recipientCustomFields custom fields for the recipient. Ignored unless $contactId is null. Is an associative array where the item key is the name of the custom field, and the item value is the field value. All keys must be strings. All values must be non-null scalars.
+     * @param string|null $bccEmail BCC recipient. May only pass a single email address, empty string, or null. If provided, it must be a well-formed email address according to FILTER_VALIDATE_EMAIL.
+     * @param string|null $fromName sender's name. If $fromEmail is set, it overrides the transactional campaign default sender name. Ignored otherwise.
+     * @param string|null $fromEmail sender's email address. Overrides the transactional campaign default sender email.
+     * @param string|null $subject subject line of email. Overrides the transactional campaign default subject.
+     * @param string|null $replyTo reply-to address. Overrides the transactional campaign default reply-to.
+     * @param string|null $senderAddress physical address of sender. Overrides the transactional campaign default sender address.
+     * @param array|null $tags associative array where the item key is the name of the tag within the content, and the item value is the tag's replacement upon sending. All keys must be strings. All values must be non-null scalars.
+     * @param array|null $ctags campaign tags. Must be a simple array of scalar values.
+     * @return OperationResult data property contains information about the newly created campaign.
      */
 	public function sendEmail(
 	    int $campaignId,
-        int $contentId,
-        string $contentName,
-        string $contentHtmlPart,
-        string $contentTextPart,
-        int $sendAtHour,
-        int $sendAtMinute,
-        bool $ignoreDnm,
-        int $contactId,
-        string $recipientEmail,
-        string $recipientFirstName,
-        string $recipientLastName,
-        string $bccEmail,
-        string $fromName,
-        string $fromEmail,
-        string $subject,
-        string $replyTo,
-        string $senderAddress,
-        array $tags,
-        string... $ctags
+        int $contentId = null,
+        string $contentName = null,
+        string $contentHtmlPart = null,
+        string $contentTextPart = null,
+        int $sendAtHour = null,
+        int $sendAtMinute = null,
+        bool $ignoreDnm = null,
+        int $contactId = null,
+        string $recipientEmail = null,
+        string $recipientFirstName = null,
+        string $recipientLastName = null,
+        array $recipientCustomFields = null,
+        string $bccEmail = null,
+        string $fromName = null,
+        string $fromEmail = null,
+        string $subject = null,
+        string $replyTo = null,
+        string $senderAddress = null,
+        array $tags = null,
+        array $ctags = null
     ) : OperationResult
 	{
-	    $array = [
-	        "campaign_id" => $campaignId
-        ];
-	    if ($contentId > 0) {
-	        $array["content_id"] = $contentId;
-        }
-	    else {
-	        $array["content"] = (object)array(
-	            "name" => $contentName,
+	    $emailObj = new \stdClass();
+        $emailObj->campaign_id = $campaignId;
+	    if (is_null($contentId)) {
+            $emailObj->content = (object)array(
+                "name" => $contentName,
                 "html_part" => $contentHtmlPart,
                 "text_part" => $contentTextPart
             );
         }
-	    if ($contactId > 0) {
-	        $array["contact_id"] = $contactId;
-        }
 	    else {
-	        $array["contact"] = (object)array(
-	            "email" => $recipientEmail,
+            $emailObj->content_id = $contentId;
+        }
+	    if (is_null($contactId)) {
+            if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
+                return new GetResult(null, "You must provide a well-formed recipientEmail because contactId is null.");
+            }
+            if (!is_array($tags)) {
+                return new GetResult(null, "Provided 'recipientCustomFields' array is not actually an array.");
+                // TODO: Given the type-hinting in the function signature, is this even possible?
+            }
+            foreach ($recipientCustomFields as $key => $value) {
+                if (!is_string($key)) {
+                    return new GetResult(null, "All keys in your recipientCustomFields array must be strings.");
+                }
+                if (is_scalar($value)) {
+                    return new GetResult(null, "All values in your recipientCustomFields array must be non-null scalars (string, float, bool, int).");
+                }
+            }
+            $emailObj->contact = (object)array(
+                "email" => $recipientEmail,
                 "first_name" => $recipientFirstName,
                 "last_name" => $recipientLastName
             );
-	        // TODO: add city & other custom fields.
+        }
+        else {
+            $emailObj->contact_id = $contactId;
         }
 	    if ($sendAtHour > 0 && $sendAtHour <= 12) {
 	        if (!($sendAtMinute >= 0 && $sendAtMinute <= 60)) {
 	            $sendAtMinute = 0;
             }
-	        $array["send_time"] = (object)array(
-	            "hour" => strval($sendAtHour),
+            $emailObj->send_time = (object)array(
+                "hour" => strval($sendAtHour),
                 "minute" => strval($sendAtMinute)
             );
         }
 	    if ($ignoreDnm) {
-	        $array["ignore_dnm"] = true;
+	        $emailObj->ignore_dnm = true;
         }
 	    if (strlen($fromEmail) != 0) {
-	        $array["from_email"] = $fromEmail;
-	        $array["from_name"] = $fromName;
+	        $emailObj->from_email = $fromEmail;
+	        $emailObj->from_name = $fromName;
         }
 	    if (strlen($replyTo) != 0) {
-	        $array["reply_to"] = $replyTo;
+	        $emailObj->reply_to = $replyTo;
         }
 	    if (strlen($subject) != 0) {
-	        $array["subject"] = $subject;
+            $emailObj->subject = $subject;
         }
 	    if (strlen($senderAddress) != 0) {
-	        $array["address"] = $senderAddress;
+            $emailObj->address = $senderAddress;
         }
 	    if (strlen($bccEmail) != 0) {
-	        $array["bcc"] = $bccEmail;
+	        if (filter_var($bccEmail, FILTER_VALIDATE_EMAIL)) {
+                $emailObj->bcc = $bccEmail;
+            }
+	        else {
+	            return new GetResult(null, "When providing a bccEmail, it needs to be a well-formed email address.");
+            }
         }
 	    if (sizeof($tags) != 0) {
 	        if (!is_array($tags)) {
                 return new GetResult(null, "Provided 'tags' array is not actually an array.");
+                // TODO: Given the type-hinting in the function signature, is this even possible?
             }
 	        foreach ($tags as $key => $value) {
 	            if (!is_string($key)) {
                     return new GetResult(null, "All keys in your tags array must be strings.");
                 }
-	            if (is_null($value)) {
-                    return new GetResult(null, "All values in your tags array must be non-null.");
+	            if (!is_scalar($value)) {
+	                return new GetResult(null, "All values in your tags array must be non-null scalars (string, float, bool, int).");
                 }
             }
-	        $array["tags"] = $tags;
+	        $emailObj->tags = $tags;
         }
 	    if (sizeof($ctags) != 0) {
-	        $array["add_ctags"] = $ctags;
+            if (!is_array($tags)) {
+                return new GetResult(null, "Provided 'ctags' array is not actually an array.");
+                // TODO: Given the type-hinting in the function signature, is this even possible?
+            }
+            foreach ($ctags as $value) {
+                if (!is_scalar($value)) {
+                    return new GetResult(null, "All values in your ctags array must be non-null scalars (string, float, bool, int).");
+                }
+            }
+	        $emailObj->add_ctags = $ctags;
         }
-
-	    // TODO: add Content Form Structured Data
-
-	    $object = (object)$array;
+	    $object = new \stdClass();
+	    $object->email = $emailObj;
 		$result = $this->_post("deliver", [], $object);
 		return $result;
 	}
