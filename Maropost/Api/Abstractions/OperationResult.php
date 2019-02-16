@@ -25,14 +25,6 @@ abstract class OperationResult
     /**
      * @var
      */
-    public $http_code;
-    /**
-     * @var
-     */
-    public $status;
-    /**
-     * @var
-     */
     protected $data;
 
     /**
