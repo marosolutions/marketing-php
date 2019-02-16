@@ -230,7 +230,7 @@ class TransactionalCampaigns
         }
 	    $object = new \stdClass();
 	    $object->email = $emailObj;
-		$result = $this->_post("deliver", [], $object);
+		$result = $this->_post("deliver", [], $object, "emails");
 		return $result;
 	}
 }

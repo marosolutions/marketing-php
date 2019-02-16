@@ -41,13 +41,13 @@ $transCamp = new Maropost\Api\TransactionalCampaigns(1000, 'wTX-esFcYzEMjSLEqkdW
 //$res = $reports->getJourneys();
 //var_dump($res->getData());
 
-$res = $transCamp->get();
+//$res = $transCamp->get();
 //var_dump($res->getData());
-var_dump($res);
-
-//$res = $transCamp->sendEmail(9298,150,null,null, null,
-//    null, null, false,9867830,null, null,
-//    null, null, null, null, null, null, null,
-//    null, null);
 //var_dump($res);
+
+$res = $transCamp->sendEmail(9298,150,null,null, null,
+    null, null, false,9867830,null, null,
+    null, null, null, null, null, null, null,
+    null, null);
+var_dump($res);
 //var_dump($res->getData());
