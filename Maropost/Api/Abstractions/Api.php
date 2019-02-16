@@ -71,7 +71,7 @@ trait Api {
      * @param array $params
      * @return GetResult
      */
-    private function _get(string $resource = null, array $params = []): GetResult
+    protected function _get(string $resource = null, array $params = []): GetResult
     {
 
         try {
@@ -83,6 +83,58 @@ trait Api {
             $url .= $this->getQueryString($params);
 
             $this->apiResponse = Request::get($url)->send();
+
+        } catch (\Exception $e) {
+
+        }
+
+        return new GetResult($this->apiResponse);
+    }
+
+    /**
+     * @param string|null $resource
+     * @param array $params
+     * @param object $object a PHP object. Will be posted as serialized JSON.
+     * @return GetResult
+     */
+    protected function _post(string $resource, array $params, $object) : GetResult
+    {
+
+        try {
+            $url = $this->url();
+            $url .= !empty($resource) ? '/' . $resource : '';
+
+            // be explicit about json format
+            $url .= '.json';
+            $url .= $this->getQueryString($params);
+            echo "calling {$url}\n";
+            $json = json_encode($object);
+            $this->apiResponse = Request::post($url, $json)->send();
+
+        } catch (\Exception $e) {
+
+        }
+
+        return new GetResult($this->apiResponse);
+    }
+
+    /**
+     * @param string|null $resource
+     * @param array $params
+     * @return GetResult
+     */
+    protected function _put(string $resource = null, array $params = []) : GetResult
+    {
+
+        try {
+            $url = $this->url();
+            $url .= !empty($resource) ? '/' . $resource : '';
+
+            // be explicit about json format
+            $url .= '.json';
+            $url .= $this->getQueryString($params);
+            echo "calling {$url}\n";
+            $this->apiResponse = Request::put($url)->send();
 
         } catch (\Exception $e) {
 
