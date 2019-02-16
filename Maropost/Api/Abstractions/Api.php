@@ -48,7 +48,7 @@ trait Api {
      */
     private function url() : string
     {
-        $url = 'api.maropost.com/accounts/';
+        $url = 'https://api.maropost.com/accounts/';
         $url .= empty($this->resource) ? $this->accountId : $this->accountId . '/' . $this->resource;
 
         return $url;
@@ -71,7 +71,7 @@ trait Api {
      * @param array $params
      * @return GetResult
      */
-    protected function _get(string $resource = null, array $params = []): GetResult
+    private function _get(string $resource = null, array $params = []): GetResult
     {
 
         try {
@@ -97,7 +97,7 @@ trait Api {
      * @param object $object a PHP object. Will be posted as serialized JSON.
      * @return GetResult
      */
-    protected function _post(string $resource, array $params, $object) : GetResult
+    private function _post(string $resource, array $params, $object) : GetResult
     {
 
         try {
@@ -123,7 +123,7 @@ trait Api {
      * @param array $params
      * @return GetResult
      */
-    protected function _put(string $resource = null, array $params = []) : GetResult
+    private function _put(string $resource = null, array $params = []) : GetResult
     {
 
         try {
