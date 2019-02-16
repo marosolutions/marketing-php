@@ -11,7 +11,7 @@ class TransactionalCampaigns
 {
     use Api;
 
-	public function __construct($accountId, $authToken)
+	public function __construct(int $accountId, string $authToken)
 	{
 		$this->auth_token = $authToken;
 		$this->accountId = $accountId;
@@ -230,7 +230,7 @@ class TransactionalCampaigns
         }
 	    $object = new \stdClass();
 	    $object->email = $emailObj;
-		$result = $this->_post("deliver", [], $object);
+		$result = $this->_post("deliver", [], $object, "emails");
 		return $result;
 	}
 }

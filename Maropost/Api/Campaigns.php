@@ -16,10 +16,10 @@ class Reports
 
     /**
      * Reports constructor.
-     * @param $accountId
-     * @param $authToken
+     * @param int $accountId
+     * @param string $authToken
      */
-    public function __construct($accountId, $authToken)
+    public function __construct(int $accountId, string $authToken)
     {
         $this->auth_token = $authToken;
         $this->accountId = $accountId;

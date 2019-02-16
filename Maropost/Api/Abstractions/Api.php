@@ -44,12 +44,13 @@ trait Api {
     }
 
     /**
+     * @param string|null $overrideResource If "truthy", it replaces (for this call only) that specified by $this->resource.
      * @return string
      */
-    private function url() : string
+    private function url(string $overrideResource) : string
     {
-        $url = 'api.maropost.com/accounts/';
-        $url .= empty($this->resource) ? $this->accountId : $this->accountId . '/' . $this->resource;
+        $url = 'https://api.maropost.com/accounts/';
+        $url .= empty($this->resource) ? $this->accountId : $this->accountId . '/' . $overrideResource?:$this->resource;
 
         return $url;
     }
@@ -69,13 +70,14 @@ trait Api {
     /**
      * @param string|null $resource
      * @param array $params
+     * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    protected function _get(string $resource = null, array $params = []): GetResult
+    private function _get(string $resource = null, array $params = [], string $overrideRootResource = null): GetResult
     {
 
         try {
-            $url = $this->url();
+            $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
 
             // be explicit about json format
@@ -95,13 +97,14 @@ trait Api {
      * @param string|null $resource
      * @param array $params
      * @param object $object a PHP object. Will be posted as serialized JSON.
+     * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    protected function _post(string $resource, array $params, $object) : GetResult
+    private function _post(string $resource, array $params, $object, string $overrideRootResource = null) : GetResult
     {
 
         try {
-            $url = $this->url();
+            $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
 
             // be explicit about json format
@@ -109,7 +112,13 @@ trait Api {
             $url .= $this->getQueryString($params);
             echo "calling {$url}\n";
             $json = json_encode($object);
-            $this->apiResponse = Request::post($url, $json)->send();
+            $this->apiResponse = Request::post($url)
+                ->addHeaders(array(
+                    "Content-type"=>"application/json",
+                    "Accept"=>"application/json"
+                ))
+                ->body($json)
+                ->send();
 
         } catch (\Exception $e) {
 
@@ -121,20 +130,26 @@ trait Api {
     /**
      * @param string|null $resource
      * @param array $params
+     * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    protected function _put(string $resource = null, array $params = []) : GetResult
+    private function _put(string $resource = null, array $params = [], string $overrideRootResource = null) : GetResult
     {
 
         try {
-            $url = $this->url();
+            $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
 
             // be explicit about json format
             $url .= '.json';
             $url .= $this->getQueryString($params);
             echo "calling {$url}\n";
-            $this->apiResponse = Request::put($url)->send();
+            $this->apiResponse = Request::put($url)
+                ->addHeaders(array(
+                    "Content-type"=>"application/json",
+                    "Accept"=>"application/json"
+                ))
+                ->send();
 
         } catch (\Exception $e) {
 
