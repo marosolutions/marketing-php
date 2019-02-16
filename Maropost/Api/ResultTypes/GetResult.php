@@ -11,16 +11,21 @@ use Httpful\Response;
  */
 class GetResult extends OperationResult
 {
-
     /**
      * GetResult constructor.
-     * @param Response $apiResponse
+     * @param Response|null $apiResponse
+     * @param string|null $errorMessage only used if $apiResponse is null.
      */
-    public function __construct(Response $apiResponse)
+    public function __construct(Response $apiResponse = null, string $errorMessage = null)
     {
-        $this->data = $apiResponse->body;
-        $this->isSuccess = true;
-        $this->errorMessage = !empty($this->errorMessage) ? $this->errorMessage : isset($apiResponse->body->error) ? $apiResponse->body->error : '';
-
+        if (is_null($apiResponse)) {
+            $this->isSuccess = false;
+            $this->errorMessage = $errorMessage;
+        }
+        else {
+            $this->data = $apiResponse->body;
+            $this->errorMessage = !empty($this->errorMessage) ? $this->errorMessage : isset($apiResponse->body->error) ? $apiResponse->body->error : '';
+            $this->isSuccess = ($apiResponse->code < 300 && strlen($this->errorMessage) == 0);
+        }
     }
 }

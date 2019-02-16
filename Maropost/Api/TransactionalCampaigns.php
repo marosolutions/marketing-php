@@ -62,19 +62,20 @@ class TransactionalCampaigns
         string... $ctags
     ) : OperationResult
 	{
-	    $object = (object)[
+	    $campaign = (object)[
 	      "name" => $name,
           "subject" => $subject,
           "preheader" => $preheader,
           "from_name" => $fromName,
           "from_email" => $fromEmail,
           "reply_to" => $replyTo,
-          "content_id" => $contentId,
+          "content_id" => strval($contentId),
           "email_preview_link" => $emailPreviewLink,
           "address" => $address,
           "language" => $language,
           "add_ctags" => $ctags
         ];
+	    $object = (object)["campaign" => $campaign];
 	    $result = $this->_post("", [], $object);
 		return $result;
 	}
@@ -101,6 +102,7 @@ class TransactionalCampaigns
      * @param string $subject subject line of email. Overrides the transactional campaign default subject.
      * @param string $replyTo reply-to address. Overrides the transactional campaign default reply-to.
      * @param string $senderAddress physical address of sender. Overrides the transactional campaign default sender address.
+     * @param array $tags a list of key/value pair objects where the key is the name of the tag within the content, and the value is the tag's replacement upon sending.
      * @param string ...$ctags array of campaign tags.
      * @return OperationResult
      */
@@ -123,6 +125,7 @@ class TransactionalCampaigns
         string $subject,
         string $replyTo,
         string $senderAddress,
+        array $tags,
         string... $ctags
     ) : OperationResult
 	{
@@ -178,66 +181,28 @@ class TransactionalCampaigns
 	    if (strlen($bccEmail) != 0) {
 	        $array["bcc"] = $bccEmail;
         }
+	    if (sizeof($tags) != 0) {
+	        if (!is_array($tags)) {
+                return new GetResult(null, "Provided 'tags' array is not actually an array.");
+            }
+	        foreach ($tags as $key => $value) {
+	            if (!is_string($key)) {
+                    return new GetResult(null, "All keys in your tags array must be strings.");
+                }
+	            if (is_null($value)) {
+                    return new GetResult(null, "All values in your tags array must be non-null.");
+                }
+            }
+	        $array["tags"] = $tags;
+        }
 	    if (sizeof($ctags) != 0) {
 	        $array["add_ctags"] = $ctags;
         }
 
-	    // TODO: add Tags; add Content Form Structured Data
+	    // TODO: add Content Form Structured Data
 
 	    $object = (object)$array;
 		$result = $this->_post("deliver", [], $object);
 		return $result;
 	}
-
-    /**
-     * @param string|null $resource
-     * @param array $params
-     * @return GetResult
-     */
-    public function _get(string $resource = null, array $params = []) : GetResult
-    {
-
-        try {
-            $url = $this->url();
-            $url .= !empty($resource) ? '/' . $resource : '';
-
-            // be explicit about json format
-            $url .= '.json';
-            $url .= $this->getQueryString($params);
-            echo "calling {$url}\n";
-            $this->apiResponse = Request::get($url)->send();
-
-        } catch (\Exception $e) {
-
-        }
-
-        return new GetResult($this->apiResponse);
-    }
-
-    /**
-     * @param string|null $resource
-     * @param array $params
-     * @param object $object a PHP object. Will be posted as serialized JSON.
-     * @return GetResult
-     */
-    private function _post(string $resource, array $params, $object) : GetResult
-    {
-
-        try {
-            $url = $this->url();
-            $url .= !empty($resource) ? '/' . $resource : '';
-
-            // be explicit about json format
-            $url .= '.json';
-            $url .= $this->getQueryString($params);
-            echo "calling {$url}\n";
-            $json = json_encode($object);
-            $this->apiResponse = Request::post($url, $json)->send();
-
-        } catch (\Exception $e) {
-
-        }
-
-        return new GetResult($this->apiResponse);
-    }
 }
