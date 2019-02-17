@@ -35,8 +35,11 @@ abstract class OperationResult
         $data = $this->data;
         $dataType = getType($data);
 
-        if ( ! in_array($dataType, ['string', 'object', 'array'])) {
-            return;
+        if (!in_array($dataType, ['string', 'object', 'array'])) {
+            if (is_null($data)) {
+                return null;
+            }
+            return null; // TODO: returning null, is okay, but should never be void.
         }
 
         if ($dataType === 'array') {
