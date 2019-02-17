@@ -26,9 +26,9 @@ class Reports
         $this->resource = 'reports';
     }
 
+
     /**
-     *
-     *
+     * Gets the list of reports
      * @return GetResult
      */
     public function get(): GetResult

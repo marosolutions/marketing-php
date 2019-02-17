@@ -2,10 +2,17 @@
 
 require('autoloader.php');
 
+
+/*
+ * Reports Api
+ *
+ */
+
+/*
+
 $reports = new Maropost\Api\Reports(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
 
-// gets Opens with all api documented examples
-$res = $reports->getOpens(
+var_dump($reports->getOpens(
     ['first_name', 'email', 'city'],
     null,
     null,
@@ -13,29 +20,30 @@ $res = $reports->getOpens(
     null,
     null,
     2
-);
-var_dump($res->getData());
+));
+var_dump($reports->getClicks([], null, null, null, null, null, 2));
+var_dump($reports->getBounces([], null, null, null, null, null, 'hard', 2));
+var_dump($reports->getUnsubscribes([], null, null, null, null, null, 2));
+var_dump($reports->getUnsubscribes([], null, null, null, null, null, 2));
+var_dump($reports->getAbReports('', null, null, 2));
+var_dump($reports->getJourneys());
 
-// gets Clicks with all api documented examples
-$res = $reports->getClicks([], null, null, null, null, null, 2);
-var_dump($res->getData());
+*/
 
-// gets Bounces with all api documented examples
-$res = $reports->getBounces([], null, null, null, null, null, 'hard', 2);
-var_dump($res->getData());
+/*
+ * Campaigns Api
+ *
+ */
 
-// gets Unsubscribes with all api documented examples
-$res = $reports->getUnsubscribes([], null, null, null, null, null, 2);
-var_dump($res->getData());
+$campaign = new Maropost\Api\Campaigns(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
 
-// gets AbReports with all api documented examples
-$res = $reports->getUnsubscribes([], null, null, null, null, null, 2);
-var_dump($res->getData());
-
-// gets Journeys with all api documented examples
-$res = $reports->getAbReports('', null, null, 2);
-var_dump($res->getData());
-
-// gets Journeys with all api documented examples
-$res = $reports->getJourneys();
-var_dump($res->getData());
+var_dump($campaign->getComplaintReports(5));die;
+var_dump($campaign->getUnsubscribeReports(5));die;
+var_dump($campaign->getHardBounceReports(5));die;
+var_dump($campaign->getSoftBounceReports(5));die;
+var_dump($campaign->getBounceReports(6));die;
+var_dump($campaign->getLinkReports(5, true));die;
+var_dump($campaign->getClickReports(5));die;
+var_dump($campaign->getOpenReports(4, true));die;
+var_dump($campaign->getDeliveredReports(4));die;
+var_dump($campaign->get());die;
