@@ -39,7 +39,7 @@ abstract class OperationResult
             if (is_null($data)) {
                 return null;
             }
-            return; // TODO: returning null, is okay, but should never be void.
+            return null; // TODO: returning null, is okay, but should never be void.
         }
 
         if ($dataType === 'array') {

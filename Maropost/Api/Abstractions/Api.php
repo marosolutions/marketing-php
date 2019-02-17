@@ -12,11 +12,11 @@ use Maropost\Api\ResultTypes\GetResult;
 trait Api {
 
     /**
-     * @var
+     * @var string
      */
     private $auth_token;
     /**
-     * @var
+     * @var int
      */
     private $accountId;
     /**
@@ -24,15 +24,26 @@ trait Api {
      */
     private $apiResponse;
     /**
-     * @var
+     * @var string
      */
     private $resource;
 
     /**
-     * @param $keyValuePairs
+     * returns an associative array representing the HTTP Headers.
+     * @return array
+     */
+    private function getHttpHeaders() : array {
+        return array(
+            "Content-type"=>"application/json",
+            "Accept"=>"application/json"
+        );
+    }
+
+    /**
+     * @param array $keyValuePairs
      * @return string
      */
-    private function getQueryString($keyValuePairs)
+    private function getQueryString(array $keyValuePairs)
     {
         $queryStr = '?auth_token=' . $this->auth_token;
         foreach ($keyValuePairs as $key => $value) {
@@ -47,10 +58,13 @@ trait Api {
      * @param string|null $overrideResource If "truthy", it replaces (for this call only) that specified by $this->resource.
      * @return string
      */
-    private function url(string $overrideResource) : string
+    private function url(string $overrideResource = null) : string
     {
         $url = 'https://api.maropost.com/accounts/';
-        $url .= empty($this->resource) ? $this->accountId : $this->accountId . '/' . $overrideResource?:$this->resource;
+        $resource = $this->resource;
+        // overrides original resource if specified
+        $resource = $overrideResource === null ? $resource : $overrideResource;
+        $url .= empty($resource) ? $this->accountId : $this->accountId . '/' . $resource;
 
         return $url;
     }
@@ -78,12 +92,12 @@ trait Api {
 
         try {
             $url = $this->url($overrideRootResource);
+            echo $url;
             $url .= !empty($resource) ? '/' . $resource : '';
-
-            // be explicit about json format
+            // gets in json format per api docs
             $url .= '.json';
             $url .= $this->getQueryString($params);
-
+echo "\n$url";
             $this->apiResponse = Request::get($url)->send();
 
         } catch (\Exception $e) {
@@ -106,18 +120,11 @@ trait Api {
         try {
             $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
-
-            // be explicit about json format
-            $url .= '.json';
             $url .= $this->getQueryString($params);
-            echo "calling {$url}\n";
+
             $json = json_encode($object);
-            $this->apiResponse = Request::post($url)
-                ->addHeaders(array(
-                    "Content-type"=>"application/json",
-                    "Accept"=>"application/json"
-                ))
-                ->body($json)
+            $this->apiResponse = Request::post($url, $json)
+                ->addHeaders($this->getHttpHeaders())
                 ->send();
 
         } catch (\Exception $e) {
@@ -128,27 +135,48 @@ trait Api {
     }
 
     /**
-     * @param string|null $resource
+     * @param string $resource
      * @param array $params
+     * @param object $object a PHP object. Will be PUT as serialized JSON.
      * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    private function _put(string $resource = null, array $params = [], string $overrideRootResource = null) : GetResult
+    private function _put(string $resource, array $params, $object, string $overrideRootResource = null) : GetResult
     {
-
         try {
             $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
-
-            // be explicit about json format
-            $url .= '.json';
             $url .= $this->getQueryString($params);
-            echo "calling {$url}\n";
-            $this->apiResponse = Request::put($url)
-                ->addHeaders(array(
-                    "Content-type"=>"application/json",
-                    "Accept"=>"application/json"
-                ))
+
+            $json = json_encode($object);
+            $this->apiResponse = Request::put($url, $json)
+                ->addHeaders($this->getHttpHeaders())
+                ->send();
+
+        } catch (\Exception $e) {
+
+        }
+
+        return new GetResult($this->apiResponse);
+    }
+
+    /**
+     * Deletes the given resource at the url().
+     *
+     * @param string $resource
+     * @param array $params
+     * @param string|null $overrideRootResource
+     * @return OperationResult
+     */
+    private function _delete(string $resource, array $params = [], string $overrideRootResource = null) : OperationResult
+    {
+        try {
+            $url = $this->url($overrideRootResource);
+            $url .= !empty($resource) ? '/' . $resource : '';
+            $url .= $this->getQueryString($params);
+
+            $this->apiResponse = Request::delete($url)
+                ->addHeaders($this->getHttpHeaders())
                 ->send();
 
         } catch (\Exception $e) {
