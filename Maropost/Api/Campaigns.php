@@ -7,10 +7,10 @@ use Maropost\Api\Abstractions\Api;
 use Httpful\Request;
 
 /**
- * Class Reports
+ * Class Campaigns
  * @package Maropost\Api
  */
-class Reports
+class Campaigns
 {
     use Api;
 
@@ -23,7 +23,7 @@ class Reports
     {
         $this->auth_token = $authToken;
         $this->accountId = $accountId;
-        $this->resource = 'reports';
+        $this->resource = 'campaigns';
     }
 
 }
