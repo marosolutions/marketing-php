@@ -155,7 +155,7 @@ class TransactionalCampaigns
                 if (!is_string($key)) {
                     return new GetResult(null, "All keys in your recipientCustomFields array must be strings.");
                 }
-                if (is_scalar($value)) {
+                if (!is_scalar($value)) {
                     return new GetResult(null, "All values in your recipientCustomFields array must be non-null scalars (string, float, bool, int).");
                 }
             }
