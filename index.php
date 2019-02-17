@@ -37,13 +37,13 @@ var_dump($reports->getJourneys());
 
 $campaign = new Maropost\Api\Campaigns(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
 
-var_dump($campaign->getComplaintReports(5));die;
-var_dump($campaign->getUnsubscribeReports(5));die;
-var_dump($campaign->getHardBounceReports(5));die;
-var_dump($campaign->getSoftBounceReports(5));die;
-var_dump($campaign->getBounceReports(6));die;
-var_dump($campaign->getLinkReports(5, true));die;
-var_dump($campaign->getClickReports(5));die;
-var_dump($campaign->getOpenReports(4, true));die;
-var_dump($campaign->getDeliveredReports(4));die;
+var_dump($campaign->getComplaintReports(5));
+var_dump($campaign->getUnsubscribeReports(5));
+var_dump($campaign->getHardBounceReports(5));
+var_dump($campaign->getSoftBounceReports(5));
+var_dump($campaign->getBounceReports(6));
+var_dump($campaign->getLinkReports(5, true));
+var_dump($campaign->getClickReports(5));
+var_dump($campaign->getOpenReports(4, true));
+var_dump($campaign->getDeliveredReports(4));
 var_dump($campaign->get());die;

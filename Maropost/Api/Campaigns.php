@@ -43,9 +43,8 @@ class Campaigns
      */
     public function getDeliveredReports(int $id): GetResult
     {
-        $this->resource .= "/{$id}";
-
-        return $this->_get('delivered_report');
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('delivered_report', [], $overrideUrl);
     }
 
     /**
@@ -57,14 +56,13 @@ class Campaigns
      */
     public function getOpenReports(int $id, bool $unique = null): GetResult
     {
-        $this->resource .= "/{$id}";
-
         $params = [];
         if (!empty($unique)) {
             $params['unique'] = $unique === true ? 'true' : 'false';
         }
 
-        return $this->_get('open_report', $params);
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('open_report', $params, $overrideUrl);
     }
 
     /**
@@ -76,14 +74,13 @@ class Campaigns
      */
     public function getClickReports(int $id, bool $unique = null): GetResult
     {
-        $this->resource .= "/{$id}";
-
         $params = [];
         if (!empty($unique)) {
             $params['unique'] = $unique === true ? 'true' : 'false';
         }
 
-        return $this->_get('click_report', $params);
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('click_report', $params, $overrideUrl);
     }
 
     /**
@@ -95,14 +92,13 @@ class Campaigns
      */
     public function getLinkReports(int $id, bool $unique = null): GetResult
     {
-        $this->resource .= "/{$id}";
-
         $params = [];
         if (!empty($unique)) {
             $params['unique'] = $unique === true ? 'true' : 'false';
         }
 
-        return $this->_get('link_report', $params);
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('link_report', $params, $overrideUrl);
 
     }
 
@@ -114,9 +110,8 @@ class Campaigns
      */
     public function getBounceReports(int $id): GetResult
     {
-        $this->resource .= "/{$id}";
-
-        return $this->_get('bounce_report');
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('bounce_report', [], $overrideUrl);
     }
 
     /**
@@ -127,9 +122,8 @@ class Campaigns
      */
     public function getSoftBounceReports(int $id): GetResult
     {
-        $this->resource .= "/{$id}";
-
-        return $this->_get('soft_bounce_report');
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('soft_bounce_report', [], $overrideUrl);
     }
 
     /**
@@ -140,9 +134,8 @@ class Campaigns
      */
     public function getHardBounceReports(int $id): GetResult
     {
-        $this->resource .= "/{$id}";
-
-        return $this->_get('hard_bounce_report');
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('hard_bounce_report', [], $overrideUrl);
     }
 
     /**
@@ -153,9 +146,9 @@ class Campaigns
      */
     public function getUnsubscribeReports(int $id): GetResult
     {
-        $this->resource .= "/{$id}";
 
-        return $this->_get('unsubscribe_report');
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('unsubscribe_report', [], $overrideUrl);
     }
 
     /**
@@ -166,9 +159,9 @@ class Campaigns
      */
     public function getComplaintReports(int $id): GetResult
     {
-        $this->resource .= "/{$id}";
 
-        return $this->_get('complaint_report');
+        $overrideUrl = $this->resource . "/$id";
+        return $this->_get('complaint_report', [], $overrideUrl);
     }
 
 

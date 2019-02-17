@@ -58,10 +58,13 @@ trait Api {
      * @param string|null $overrideResource If "truthy", it replaces (for this call only) that specified by $this->resource.
      * @return string
      */
-    private function url(string $overrideResource) : string
+    private function url(string $overrideResource = null) : string
     {
         $url = 'https://api.maropost.com/accounts/';
-        $url .= empty($this->resource) ? $this->accountId : $this->accountId . '/' . $overrideResource?:$this->resource;
+        $resource = $this->resource;
+        // overrides original resource if specified
+        $resource = $overrideResource === null ? $resource : $overrideResource;
+        $url .= empty($resource) ? $this->accountId : $this->accountId . '/' . $resource;
 
         return $url;
     }
@@ -89,9 +92,12 @@ trait Api {
 
         try {
             $url = $this->url($overrideRootResource);
+            echo $url;
             $url .= !empty($resource) ? '/' . $resource : '';
+            // gets in json format per api docs
+            $url .= '.json';
             $url .= $this->getQueryString($params);
-
+echo "\n$url";
             $this->apiResponse = Request::get($url)->send();
 
         } catch (\Exception $e) {
