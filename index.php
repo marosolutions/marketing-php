@@ -94,7 +94,10 @@ Contacts Api
 */
 
 $contacts = new \Maropost\Api\Contacts(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
-dd($contacts->getForList(5));
+
+dd($contacts->createOrUpdateContact(10135855,'metowrite@gmail.com', 'updated aashu', 'updated lastname')->getData());
+dd($contacts->createOrUpdateForList(1,'writetome@gmail.com', 'aashu', 'acharya', '23453245', '2354324453', 65, ['first_cust_field' => 'test passed'], [], [], false, false));
+dd($contacts->getForList(1));
 dd($contacts->getClicks(5));
 dd($contacts->getOpens(5));
 dd($contacts->getForEmail('rohit@gmail.com'));
