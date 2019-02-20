@@ -26,19 +26,13 @@ class Journeys
      *
      * @return GetResult
      */
-	public function get() : GetResult
+	public function get() : OperationResult
 	{
         try {
             return $this->_get('', []);
         } catch (\Exception $e) {
             die('exception ');
         }
-	    /*
-	    $result = new GetResult();
-		$decoded = json_decode($this->getUrl("", null)->data, true);
-		$result->journeys = $decoded;
-		return $result;
-	    */
 	}
 
     /**
@@ -47,19 +41,13 @@ class Journeys
      * @param int $journeyId
      * @return GetResult
      */
-	public function getCampaigns(int $journeyId) : GetResult //GetCampaignsResult
+	public function getCampaigns(int $journeyId) : OperationResult
 	{
         try {
             return $this->_get($journeyId."/journey_campaigns", []);
         } catch (\Exception $e) {
             die('exception ');
         }
-	    /*
-	    $result = new GetCampaignsResult();
-	    $decoded = json_decode($this->getUrl($journeyId."/journey_campaigns", null)->data, true);
-	    $result->campaigns = $decoded;
-		return $result;
-	    */
 	}
 
     /**
@@ -68,19 +56,13 @@ class Journeys
      * @param int $journeyId
      * @return GetResult
      */
-	public function getContacts(int $journeyId) : GetResult // GetContactsResult
+	public function getContacts(int $journeyId) : OperationResult
 	{
         try {
             return $this->_get($journeyId."/journey_contacts", []);
         } catch (\Exception $e) {
             die('exception ');
         }
-        /*
-		$result = new GetContactsResult();
-        $decoded = json_decode($this->getUrl($journeyId."/journey_contacts", null)->data, true);
-        $result->contacts = $decoded;
-		return $result;
-        */
 	}
 
     /**
