@@ -7,6 +7,10 @@ use Maropost\Api\Abstractions\Api;
 use Maropost\Api\Abstractions\OperationResult;
 use Maropost\Api\InputTypes\OrderItemInput;
 
+/**
+ * Class ProductAndRevenue
+ * @package Maropost\Api
+ */
 class ProductAndRevenue
 {
     use Api;

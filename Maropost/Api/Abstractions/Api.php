@@ -92,7 +92,6 @@ trait Api {
 
         try {
             $url = $this->url($overrideRootResource);
-            echo $url;
             $url .= !empty($resource) ? '/' . $resource : '';
             // gets in json format per api docs
             $url .= '.json';
@@ -110,11 +109,11 @@ echo "\n$url";
     /**
      * @param string|null $resource
      * @param array $params
-     * @param object $object a PHP object. Will be posted as serialized JSON.
+     * @param \stdClass $object a PHP object. Will be posted as serialized JSON.
      * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    private function _post(string $resource, array $params, $object, string $overrideRootResource = null) : GetResult
+    private function _post(string $resource, array $params, \stdClass $object, string $overrideRootResource = null) : GetResult
     {
 
         try {
@@ -123,6 +122,8 @@ echo "\n$url";
             $url .= $this->getQueryString($params);
 
             $json = json_encode($object);
+//            dd($json);
+            echo "{$url}";
             $this->apiResponse = Request::post($url, $json)
                 ->addHeaders($this->getHttpHeaders())
                 ->send();
@@ -137,11 +138,11 @@ echo "\n$url";
     /**
      * @param string $resource
      * @param array $params
-     * @param object $object a PHP object. Will be PUT as serialized JSON.
+     * @param \stdClass $object a PHP object. Will be PUT as serialized JSON.
      * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    private function _put(string $resource, array $params, $object, string $overrideRootResource = null) : GetResult
+    private function _put(string $resource, array $params, \stdClass $object, string $overrideRootResource = null) : GetResult
     {
         try {
             $url = $this->url($overrideRootResource);

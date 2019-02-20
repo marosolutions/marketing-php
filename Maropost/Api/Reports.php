@@ -4,7 +4,6 @@ namespace Maropost\Api;
 
 use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\Api;
-use Httpful\Request;
 
 /**
  * Class Reports
