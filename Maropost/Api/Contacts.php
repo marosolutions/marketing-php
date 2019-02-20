@@ -274,11 +274,11 @@ class Contacts
     ): OperationResult
     {
         $params = [];
-        if (!empty($listIds) {
+        if (!empty($listIds)) {
             $params['list_ids'] = implode(',', $listIds);
         }
 
-        return $this->_delete($contactId, $params));
+        return $this->_delete($contactId, $params);
 
     }
 
