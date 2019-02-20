@@ -138,21 +138,28 @@ echo "\n$url";
     /**
      * @param string $resource
      * @param array $params
-     * @param \stdClass $object a PHP object. Will be PUT as serialized JSON.
+     * @param \stdClass|null $object a PHP object. Will be PUT as serialized JSON.
      * @param string|null $overrideRootResource if "truthy", it replaces (for this call only) the value set for $this->resource. (Not to be confused with $resource, which is more specific.)
      * @return GetResult
      */
-    private function _put(string $resource, array $params, \stdClass $object, string $overrideRootResource = null) : GetResult
+    private function _put(string $resource, array $params, \stdClass $object = null, string $overrideRootResource = null) : GetResult
     {
         try {
             $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
             $url .= $this->getQueryString($params);
 
-            $json = json_encode($object);
-            $this->apiResponse = Request::put($url, $json)
-                ->addHeaders($this->getHttpHeaders())
-                ->send();
+            if (is_object($object)) {
+                $json = json_encode($object);
+                $this->apiResponse = Request::put($url, $json)
+                    ->addHeaders($this->getHttpHeaders())
+                    ->send();
+            }
+            else {
+                $this->apiResponse = Request::put($url)
+                    ->addHeaders($this->getHttpHeaders())
+                    ->send();
+            }
 
         } catch (\Exception $e) {
 
