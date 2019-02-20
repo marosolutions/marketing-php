@@ -182,7 +182,128 @@ The specific APIs contained are:
 
 #### Available methods:
 
-* TODO
+ - `getForEmail(string $email)`
+     * Gets the contact according to email address 
+     * `$email`: Email address of the contact
+
+ - `getOpens(int $contactId)`
+     * Gets a list of opens for the specified contact
+
+ - `getClicks(int $contactId)`
+     * Get a list of clicks for the specified contact
+
+ - `getForList(int $listId)`
+     * Get the list of contacts for the specified list
+
+ - `createOrUpdateForList(
+        int $listId,
+        string $email,
+        string $firstName = null,
+        string $lastName = null,
+        string $phone = null,
+        string $fax = null,
+        int $uid = null,
+        array $customField = [],
+        array $addTags = [],
+        array $removeTags = [],
+        bool $removeFromDNM = true,
+        bool $subscribe = true
+    )`
+     * Creates a contact within a list. Updates if previous contact is matched by email.
+     * `$listId`: ID of the list for which the contact is being created
+     * `$email`: email address for the contact to be created|updated
+     * `$firstName`: first name of Contact
+     * `$lastName`: last Name of Contact
+     * `$phone`: phone number of Contact
+     * `$fax`: fax number of Contact
+     * `$uid`: UID for the contact
+     * `$customField`: custom fields passed as associative array. Keys represent the field names while values represent the values.
+     * `$addTags`: tags to add to the contact. Simple array of tag names (strings).
+     * `$removeTags`: tags to remove from the contact. Simple array of tag names (strings).
+     * `$removeFromDNM`: Set this true to subscribe contact to the list, and remove it from DNM.
+     * `$subscribe`: true to subscribe the contact to the list; false otherwise.
+
+ - `createOrUpdateContact(
+        int $contactId,
+        string $email,
+        string $firstName = null,
+        string $lastName = null,
+        string $phone = null,
+        string $fax = null,
+        int $uid = null,
+        array $customField = [],
+        array $addTags = [],
+        array $removeTags = [],
+        bool $removeFromDNM = true,
+        bool $subscribe = true
+    )`
+     * Creates a contact without a list. Updates if already existing email is passed.
+     * `$contactId`: ID of the contact
+     * `$email`: Email address for the contact to be created|updated
+     * `$firstName`: first name of Contact
+     * `$lastName`: last Name of Contact
+     * `$phone`: phone number of Contact
+     * `$fax`: fax number of Contact
+     * `$uid`: UID for the contact
+     * `$customField`: custom fields passed as associative array. Keys represent the field names while values represent the values
+     * `$addTags`: tags to add to the contact. Simple array of tag names (strings).
+     * `$removeTags`: tags to remove from the contact. Simple array of tag names (strings).
+     * `$removeFromDNM`: set this true to subscribe contact to the list, and remove it from DNM
+
+ - `createOrUpdateContacts(
+        string $email,
+        string $firstName = null,
+        string $lastName = null,
+        string $phone = null,
+        string $fax = null,
+        int $uid = null,
+        array $customField = [],
+        array $addTags = [],
+        array $removeTags = [],
+        bool $removeFromDNM = false,
+        array $subscribeListIds = [],
+        array $unsubscribeListIds = [],
+        array $unsubscribeWorkflowIds = [],
+        string $unsubscribeCampaign = null
+    )`
+     * Creates or updates Contact
+        - Multiple lists can be subscribed, unsubscribed. 
+        - Multiple workflows can be unsubscribed.
+     * `$email`: email address for the contact to be created|updated
+     * `$firstName`: first name of Contact
+     * `$lastName`: last name of Contact
+     * `$phone`: phone number of Contact
+     * `$fax`: fax number of Contact
+     * `$uid`: UID for the Contact
+     * `$customField`: custom fields passed as associative array. Keys represent the field names while values represent the values
+     * `$addTags`: tags to add to the contact. Simple array of tag names (strings)
+     * `$removeTags`: tags to remove from the contact. Simple array of tag names (strings)
+     * `$removeFromDNM`: set this true to subscribe contact to the list, and remove it from DNM
+     * `$subscribeListIds`: simple array of IDs of lists to subscribe the contact to
+     * `$unsubscribeListIds`: simple array of IDs of Lists to unsubscribe the contact from
+     * `$unsubscribeWorkflowIds`: simple array of list of IDs of workflows to unsubscribe the contact from
+     * `$unsubscribeCampaign`: campaignID to unsubscribe the contact from
+
+ - `public function deleteAll(string $email)`
+     * Deletes specified contact from all lists
+     * `$email`: email address of the contact
+
+ - `deleteContact(int $contactId, array $listIds = [])`
+     * Deletes the specified contact from the specified lists
+     * `$contactId`: id of the contact
+     * `$listIds`: simple array of ids of the lists
+
+ - `deleteContactForUid(string $uid)`
+     * Deletes contact having the specified UID
+
+ - `deleteListContact(int $listId, int $contactId)`
+     * Deletes specified contact from the specified list
+
+ - `unsubscribeAll(string $contactFieldValue, string $contactFieldName = 'email')`
+     * Unsubscribes contact having the specified field name/value.
+     * `$contactFieldValue`: the value of the field for the contact(s) being unsubscribed
+     * `$contactFieldName`: the name of the field being checked for the value. At present, the 
+     accepted field names are: 'email' or 'uid'
 
 ### Journeys
 

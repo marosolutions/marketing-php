@@ -84,16 +84,16 @@ class Contacts
      *
      * @param int $listId ID of the list for which the contact is being created
      * @param string $email Email address for the contact to be created|updated
-     * @param string|null $firstName Firstname of Contact
-     * @param string|null $lastName Last Name of Contact
+     * @param string|null $firstName First name of Contact
+     * @param string|null $lastName Last name of Contact
      * @param string|null $phone Phone number of Contact
-     * @param string|null $fax Fax of Contact
-     * @param int|null $uid UID the contact belongs to
-     * @param array $customField Custom Field passed as array. Keys represent the field names while values represent the values
-     * @param array $addTags Tags to add to the contact. Non associated array of tagnames
-     * @param array $removeTags Tags to remove from the contact. Non associative array of tagnames
-     * @param bool $removeFromDNM Set this true to subcribe contact to the list, and remove it from DNM)
-     * @param bool $subscribe
+     * @param string|null $fax Fax number of Contact
+     * @param int|null $uid UID for the Contact
+     * @param array $customField Custom Fields passed as associative array. Keys represent the field names while values represent the values
+     * @param array $addTags Tags to add to the contact. Simple array of tag names
+     * @param array $removeTags Tags to remove from the contact. Simple array of tag names
+     * @param bool $removeFromDNM Set this true to subscribe contact to the list, and remove it from DNM)
+     * @param bool $subscribe Set this true to subscribe contact to the list; false otherwise
      * @return OperationResult
      */
     public function createOrUpdateForList(
