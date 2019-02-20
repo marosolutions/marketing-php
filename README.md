@@ -1,13 +1,13 @@
 # Maropost API PHP Package
 
-##Summary
+## Summary
 This package provides programmatic access to several Maropost services. It 
 consists of eight services within the `Maropost.Api` namespace. Each service 
 consists of one or more functions that perform an operation against your 
 Maropost account. These functions return a result object indicating 
 success/failure, any Exceptions throw, and the resulting data.
 
-##Usage
+## Usage
 To use a service, first instantiate it, providing your Maropost AccountId
 and Auth Token. For example, to get your list of reports using the Reports
 service, execute:
@@ -32,15 +32,15 @@ The object also contains one function, `getData()`, which contains whatever
 data the operation itself provides. Some operations, such as `delete()`
 operations, might not provide any data.
 
-##Specific APIs
+## Specific APIs
 The specific APIs contained are:
 
-###Campaigns
+### Campaigns
 #### Instantiation:
 
     new Maropost.Api.Campaigns($myAccountId, $myAuthToken)
 
-####Available methods:
+#### Available methods:
 
  - `get()`
    - returns the list of campaigns for the account
@@ -67,7 +67,7 @@ The specific APIs contained are:
  - `getUnsubscribeReports(int $id)`
    - returns the list of unsubscribe reports for the given campaign ID
    
-###AB Test Campaigns
+### AB Test Campaigns
 #### Instantiation:
 
     new Maropost.Api.AbTestCampaigns($myAccountId, $myAuthToken)
@@ -91,13 +91,13 @@ The specific APIs contained are:
      settings.
    - `$sendAt`: DateTime string having the format  YYYY-MM-DDTHH:MM:SS-05:00
 
-###Transactional Campaigns
+### Transactional Campaigns
 
 #### Instantiation:
 
     new Maropost.Api.TransactionalCampaigns($myAccountId, $myAuthToken)
 
-####Available methods:
+#### Available methods:
  - `get()`
      * returns the list of Transaction Campaigns
  - `create(string $name, string $subject, string $preheader,
@@ -165,23 +165,23 @@ The specific APIs contained are:
      * `$ctags`: campaign tags. Must be a simple array of scalar values.
      
 
-###Contacts
+### Contacts
 
 #### Instantiation:
 
     new Maropost.Api.Contacts($myAccountId, $myAuthToken)
 
-####Available methods:
+#### Available methods:
 
 * TODO
 
-###Journeys
+### Journeys
 
 #### Instantiation:
 
     new Maropost.Api.Journeys($myAccountId, $myAuthToken)
 
-####Available methods:
+#### Available methods:
 
  - `get()`
      * Gets the list of journeys
@@ -226,13 +226,13 @@ The specific APIs contained are:
      who has finished its journey once. (To retrigger, *make sure* that 
      "Retrigger Journey" option is enabled.)
 
-###Product and Revenue
+### Product and Revenue
 
 #### Instantiation:
 
     new Maropost.Api.ProductAndRevenue($myAccountId, $myAuthToken)
 
-####Available methods:
+#### Available methods:
 
  - `getOrder(int $id)`
      * Gets a the specified order.
@@ -282,9 +282,9 @@ The specific APIs contained are:
      * `$id`: Maropost order_id
      * `$productIds`: the product(s) to delete from the order
 
-###Relational Tables
+### Relational Tables
 
-####Instantiation:
+#### Instantiation:
 Unlike the other services, the constructor for this requires a third
 parameter: `$tableName`. So for example:
 
@@ -299,7 +299,7 @@ you can call
 You can also call `_getTableName()` to determine which table is currently
 set.
 
-####Available functions:
+#### Available functions:
 
  - `get()`
      * Gets the records of the Relational Table
@@ -327,13 +327,13 @@ set.
      * Deletes the given record of the Relational Table
      * `$id`: ID of the Relational Table to delete
 
-###Reports
+### Reports
 
 #### Instantiation:
 
     new Maropost.Api.Reports($myAccountId, $myAuthToken)
 
-####Available methods:
+#### Available methods:
  - `get()`
    - returns the list of reports
 
