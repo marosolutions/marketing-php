@@ -35,6 +35,15 @@ operations, might not provide any data.
 ## Specific APIs
 The specific APIs contained are:
 
+- [Campaigns](#campaigns)
+- [AB Test Campaigns](#ab-test-campaigns)
+- [Transactional Campaigns](#transactional-campaigns)
+- [Contacts](#contacts)
+- [Journeys](#journeys)
+- [Product and Revenue](#product-and-revenue)
+- [Relational Tables](#relational-tables)
+- [Reports](#reports)
+
 ### Campaigns
 #### Instantiation:
 
