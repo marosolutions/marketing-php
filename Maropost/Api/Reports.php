@@ -2,8 +2,8 @@
 
 namespace Maropost\Api;
 
-use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\Api;
+use Maropost\Api\Abstractions\OperationResult;
 
 /**
  * Class Reports
@@ -28,9 +28,9 @@ class Reports
 
     /**
      * Gets the list of reports
-     * @return GetResult
+     * @return OperationResult
      */
-    public function get(): GetResult
+    public function get(): OperationResult
     {
         return $this->_get();
     }
@@ -45,7 +45,7 @@ class Reports
      * @param string|null $email filters by provided email in the contact
      * @param string|null $uid filters by uid
      * @param int|null $per determines how many records per request to receive
-     * @return GetResult
+     * @return OperationResult
      */
     public function getOpens(
         array $fields = [],
@@ -55,7 +55,7 @@ class Reports
         string $email = null,
         string $uid = null,
         int $per = null
-    ): GetResult
+    ): OperationResult
     {
         $params = [
             'fields' => implode(',', $fields),
@@ -82,7 +82,7 @@ class Reports
      * @param string|null $email Gets Clicks for specific email
      * @param string|null $uid Gets Clicks for provided uid
      * @param int|null $per Gets the specified number of records
-     * @return GetResult
+     * @return OperationResult
      */
     public function getClicks(
         array $fields = [],
@@ -92,7 +92,7 @@ class Reports
         string $email = null,
         string $uid = null,
         int $per = null
-    ): GetResult
+    ): OperationResult
     {
         $params = [
             'fields' => implode(',', $fields),
@@ -119,7 +119,7 @@ class Reports
      * @param string|null $email Gets Bounces for specific email
      * @param string|null $uid Gets Bounces for provided uid
      * @param int|null $per Gets the specified number of records
-     * @return GetResult
+     * @return OperationResult
      */
     public function getBounces(
         array $fields = [],
@@ -130,7 +130,7 @@ class Reports
         string $uid = null,
         string $type = null,
         int $per = null
-    ): GetResult
+    ): OperationResult
     {
         $params = [
             'fields' => implode(',', $fields),
@@ -158,7 +158,7 @@ class Reports
      * @param string|null $email Gets Unsubscribes for specific email
      * @param string|null $uid Gets Unsubscribes for provided uid
      * @param int|null $per Gets the specified number of records
-     * @return GetResult
+     * @return OperationResult
      */
     public function getUnsubscribes(
         array $fields = [],
@@ -168,7 +168,7 @@ class Reports
         string $email = null,
         string $uid = null,
         int $per = null
-    ): GetResult
+    ): OperationResult
     {
         $params = [
             'fields' => implode(',', $fields),
@@ -195,7 +195,7 @@ class Reports
      * @param string|null $email Gets Complaints for specific email
      * @param string|null $uid Gets Complaints for provided uid
      * @param int|null $per Gets the specified number of records
-     * @return GetResult
+     * @return OperationResult
      */
     public function getComplaints(
         array $fields = [],
@@ -205,7 +205,7 @@ class Reports
         string $email = null,
         string $uid = null,
         int $per = null
-    ): GetResult
+    ): OperationResult
     {
         $params = [
             'fields' => implode(',', $fields),
@@ -229,14 +229,14 @@ class Reports
      * @param string|null $from Beginning of date range filter
      * @param string|null $to End of date range filter
      * @param int|null $per gets the mentioned number of reports
-     * @return GetResult
+     * @return OperationResult
      */
     public function getAbReports(
         string $name = '',
         string $from = null,
         string $to = null,
         int $per = null
-    ): GetResult
+    ): OperationResult
     {
         // resetting resource to make url appropriate
         $this->resource = '';
@@ -256,9 +256,9 @@ class Reports
     /**
      * Gets the list of all Journeys
      *
-     * @return GetResult
+     * @return OperationResult
      */
-    public function getJourneys(): GetResult
+    public function getJourneys(): OperationResult
     {
         return $this->_get('journeys');
     }
