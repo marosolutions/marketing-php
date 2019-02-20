@@ -3,114 +3,99 @@
 namespace Maropost\Api;
 
 use Maropost\Api\Abstractions\Api;
-use Maropost\Api\InputTypes\RelationalTableColumn;
+use Maropost\Api\InputTypes\KeyValue;
 use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\OperationResult;
 
+/**
+ * Class RelationalTables
+ * @package Maropost\Api
+ */
 class RelationalTables
 {
     use Api;
 
-	public function __construct(int $accountId, string $authToken)
+    /**
+     * @param int $accountId
+     * @param string $authToken
+     * @param string $tableName name of the table to act against for
+     */
+	public function __construct(int $accountId, string $authToken, string $tableName)
 	{
 		$this->auth_token = $authToken;
 		$this->accountId = $accountId;
-        $this->resource = 'relational_tables';
+        $this->resource = $tableName;
 	}
 
     /**
-     * Gets the list of Relational Tables
-     *
+     * Gets the records of the Relational Table
      * @return GetResult
      */
 	public function get() : OperationResult
 	{
-        return $this->_get('', []);
+        return $this->_get("", []);
 	}
 
     /**
-     * Gets a specific Relational Table
+     * Gets the specified record from the Relational Table
      *
-     * @param int $id ID of the specific Relational Table
-     * @return GetResult
+     * @param int $id ID of the existing record you wish to read
+     * @return OperationResult
      */
-    public function getForId(int $id) : OperationResult
+    public function show(int $id) : OperationResult
     {
-        return $this->_get($id, []);
+        $object = (object)array("record" => (object)array("ID" => $id));
+        return $this->_post("show", [], $object);
     }
 
     /**
-     * Updates the given Relational Table
-     *
-     * @param int $id ID of the existing table you wish to update
-     * @param string $name new name for the table
-     * @param RelationalTableColumn ...$columns replacement columns for the table.
+     * Adds a record to the Relational Table
      * @return OperationResult
      */
-    protected function update(int $id, string $name, RelationalTableColumn ...$columns) : OperationResult
-    {
-        // validate columns input
-        foreach ($columns as $column) {
-            $result = $column->validate();
-            if (!$result->isSuccess) {
-                return $result;
-            }
-        }
-
-        $table = (object)[
-            "name" => $name,
-            "relational_columns_attributes" => $columns
-        ];
-        $object = (object)["relational_table" => $table];
-        $result = $this->_put($id, [], $object);
-        return $result;
-    }
-
-    /**
-     * Creates a Relational Table
-     *
-     * @param string $name name for the table you wish to create
-     * @param RelationalTableColumn ...$columns
-     * @return OperationResult
-     */
-	public function create(string $name, RelationalTableColumn... $columns) : OperationResult
+	public function create(KeyValue... $keyValues) : OperationResult
 	{
 	    // validate columns input
-	    foreach ($columns as $column) {
-	        $result = $column->validate();
-	        if (!$result->isSuccess) {
-	            return $result;
-            }
-        }
+	    //foreach ($keyValues as $key => $value) {
+        //}
 
-	    $table = (object)[
-	      "name" => $name,
-          "relational_columns_attributes" => $columns
-        ];
-	    $object = (object)["relational_table" => $table];
-	    $result = $this->_post("", [], $object);
-		return $result;
+	    $object = (object)array("record" => (object)$keyValues);
+	    return $this->_post("create", [], $object);
 	}
 
+	public function update(KeyValue... $keyValues) : OperationResult
+    {
+        $object = (object)array("record" => (object)$keyValues);
+        return $this->_put("update", [], (object)$keyValues);
+    }
+
     /**
-     * Deletes the given Relational Table (and the records therein)
+     * Deletes the given record of the Relational Table
      *
      * @param int $id ID of the Relational Table to delete
      * @return OperationResult
      */
 	public function delete(int $id) : OperationResult
     {
-        return $this->_delete($id);
+        return $this->_delete("delete", array("id" => $id));
     }
 
     /**
-     * Deletes the records of the given Relational Table, but keeps the table
-     *
-     * @param int $id ID of the Relational Table whose records you want to delete
-     * @return OperationResult
+     * @param string|null $overrideResource ignored
+     * @return string
      */
-    public function deleteRecords(int $id) : OperationResult
+    private function url(string $overrideResource = null) : string
     {
-        return $this->_get($id."/truncate", []);
+        return 'https://rdb.maropost.com/'.$this->accountId.'/'.$this->resource;
     }
+
+    /**
+     * Updates/switches which table this service is acting against
+     * @param string $newTableName name of the table to use for successive calls.
+     */
+    public function _setTableName(string $newTableName) { $this->resource = $newTableName; }
+    /**
+     * @return string name of the table this service is acting against.
+     */
+    public function _getTableName() { return $this->resource; }
+
 }
