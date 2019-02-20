@@ -2,8 +2,6 @@
 
 namespace Maropost\Api\Abstractions;
 
-use Httpful\Response;
-
 /**
  * Class OperationResult
  * @package Maropost\Api\Abstractions
@@ -28,30 +26,24 @@ abstract class OperationResult
     protected $data;
 
     /**
-     * @return array|mixed|void
+     * Gets the data of the Maropost response to the API call.
+     * @return array|mixed|null
      */
     public function getData()
     {
         $data = $this->data;
-        $dataType = getType($data);
-
-        if (!in_array($dataType, ['string', 'object', 'array'])) {
-            if (is_null($data)) {
-                return null;
-            }
-            return null; // TODO: returning null, is okay, but should never be void.
+        if (is_string($data)) {
+            return json_decode($data);
         }
-
-        if ($dataType === 'array') {
-            $data = array_map(function ($value) {
+        elseif (is_array($data)) {
+            // if the array elements themselves are associative arrays, convert them to objects.
+            return array_map(function ($value) {
                 return (object) $value;
             }, $data);
         }
-
-        if ($dataType === 'string') {
-            $data = json_decode($data);
+        elseif (!is_object($data)) {
+            return null;
         }
-
         return $data;
     }
 }

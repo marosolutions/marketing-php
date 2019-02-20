@@ -2,11 +2,14 @@
 
 namespace Maropost\Api;
 
-use Httpful\Request;
 use Maropost\Api\Abstractions\Api;
 use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\OperationResult;
 
+/**
+ * Class TransactionalCampaigns
+ * @package Maropost\Api
+ */
 class TransactionalCampaigns
 {
     use Api;

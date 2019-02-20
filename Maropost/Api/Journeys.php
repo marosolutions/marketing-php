@@ -5,8 +5,11 @@ namespace Maropost\Api;
 use Maropost\Api\ResultTypes\GetResult;
 use Maropost\Api\Abstractions\Api;
 use Maropost\Api\Abstractions\OperationResult;
-use Httpful\Request;
 
+/**
+ * Class Journeys
+ * @package Maropost\Api
+ */
 class Journeys
 {
     use Api;
