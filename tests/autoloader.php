@@ -143,6 +143,4 @@ class Psr4AutoloaderClass
 
 $loader = new Psr4AutoloaderClass;
 $loader->register();
-$loader->addNamespace('Maropost\Api', 'Maropost/Api');
-
-require('httpful.phar');
+$loader->addNamespace('Maropost\Api', '../src');

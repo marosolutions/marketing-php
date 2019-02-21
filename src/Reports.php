@@ -232,7 +232,7 @@ class Reports
      * @return OperationResult
      */
     public function getAbReports(
-        string $name = '',
+        string $name,
         string $from = null,
         string $to = null,
         int $per = null
