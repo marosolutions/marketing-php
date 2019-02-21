@@ -119,6 +119,7 @@ echo "\n$url";
         try {
             $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
+            $url .= '.json';
             $url .= $this->getQueryString($params);
 
             $json = json_encode($object);
@@ -147,6 +148,7 @@ echo "\n$url";
         try {
             $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
+            $url .= '.json';
             $url .= $this->getQueryString($params);
 
             if (is_object($object)) {
@@ -181,6 +183,7 @@ echo "\n$url";
         try {
             $url = $this->url($overrideRootResource);
             $url .= !empty($resource) ? '/' . $resource : '';
+            $url .= '.json';
             $url .= $this->getQueryString($params);
 
             $this->apiResponse = Request::delete($url)
