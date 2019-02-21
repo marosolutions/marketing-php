@@ -39,17 +39,20 @@ class RelationalTables
     /**
      * Gets the specified record from the Relational Table
      *
-     * @param int $id ID of the existing record you wish to read
+     * @param string $idFieldName name of the field representing the unique identifier (E.g., "id", "email")
+     * @param mixed $idFieldValue value of the identifier field, for the record to get.
      * @return OperationResult
      */
-    public function show(int $id) : OperationResult
+    public function show(string $idFieldName, $idFieldValue) : OperationResult
     {
-        $object = (object)array("record" => (object)array("ID" => $id));
+        $object = (object)array("record" => (object)array($idFieldName => $idFieldValue));
         return $this->_post("show", [], $object);
     }
 
     /**
-     * Adds a record to the Relational Table
+     * Adds a record to the Relational Table.
+     *
+     * @param KeyValue ...$keyValues a list of field name/values for the record to be updated.
      * @return OperationResult
      */
 	public function create(KeyValue... $keyValues) : OperationResult
@@ -62,6 +65,12 @@ class RelationalTables
 	    return $this->_post("create", [], $object);
 	}
 
+    /**
+     * Updates a record in the Relational Table.
+     *
+     * @param KeyValue ...$keyValues a list of field name/values for the record to be updated.
+     * @return OperationResult
+     */
 	public function update(KeyValue... $keyValues) : OperationResult
     {
         $object = (object)array("record" => (object)$keyValues);
@@ -69,14 +78,27 @@ class RelationalTables
     }
 
     /**
-     * Deletes the given record of the Relational Table
+     * Creates or updates a record in the Relational Table.
      *
-     * @param int $id ID of the Relational Table to delete
+     * @param KeyValue ...$keyValues a list of field name/values for the record to be created (or updated).
      * @return OperationResult
      */
-	public function delete(int $id) : OperationResult
+    public function upsert(KeyValue... $keyValues) : OperationResult
     {
-        return $this->_delete("delete", array("id" => $id));
+        $object = (object)array("record" => (object)$keyValues);
+        return $this->_put("upsert", [], $object);
+    }
+
+    /**
+     * Deletes the given record of the Relational Table
+     *
+     * @param string $idFieldName name of the field representing the unique identifier (E.g., "id", "email")
+     * @param mixed $idFieldValue value of the identifier field, for the record to delete.
+     * @return OperationResult
+     */
+	public function delete(string $idFieldName, $idFieldValue) : OperationResult
+    {
+        return $this->_delete("delete", array($idFieldName => $idFieldValue));
     }
 
     /**
