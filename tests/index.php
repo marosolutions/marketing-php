@@ -1,6 +1,12 @@
 <?php
 
-require('autoloader.php');
+// Before this works, you need to download composer.phar to the '../' folder,
+// then from the CLI run "php composer.phar install".
+
+require_once 'autoloader.php';
+require_once '../vendor/autoload.php';
+$accountId = 0;
+$authToken = "";
 
 function dd()
 {
@@ -20,7 +26,7 @@ function dd()
 
 /*
 
-$reports = new Maropost\Api\Reports(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
+$reports = new Maropost\Api\Reports($accountId, $authToken);
 
 var_dump($reports->getOpens(
     ['first_name', 'email', 'city'],
@@ -45,7 +51,7 @@ var_dump($reports->getJourneys());
  *
  *
 
-$campaign = new Maropost\Api\Campaigns(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
+$campaign = new Maropost\Api\Campaigns($accountId, $authToken);
 
 var_dump($campaign->getComplaintReports(5));
 var_dump($campaign->getUnsubscribeReports(5));
@@ -65,7 +71,7 @@ Ab Test Campaign API
 
 */
 
-$abTestCamp = new Maropost\Api\AbTestCampaigns(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
+$abTestCamp = new \Maropost\Api\AbTestCampaigns($accountId, $authToken);
 $groupAttr = [
     [
         'name'  => 'Group A',
@@ -94,7 +100,7 @@ dd($createRes);
 Contacts Api
 */
 
-//$contacts = new \Maropost\Api\Contacts(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
+//$contacts = new \Maropost\Api\Contacts($accountId, $authToken);
 //
 //dd($contacts->createOrUpdateContact(10135855,'metowrite@gmail.com', 'updated aashu', 'updated lastname')->getData());
 //dd($contacts->createOrUpdateForList(1,'writetome@gmail.com', 'aashu', 'acharya', '23453245', '2354324453', 65, ['first_cust_field' => 'test passed'], [], [], false, false));
