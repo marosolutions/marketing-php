@@ -7,6 +7,26 @@ consists of one or more functions that perform an operation against your
 Maropost account. These functions return a result object indicating 
 success/failure, any Exceptions throw, and the resulting data.
 
+## Installation
+
+### Composer
+[Composer](https://getcomposer.org) is a modern alternative to PEAR and easy to work
+with. Because this package is PSR-4-compliant, you can install it using Composer. To
+do so, simply add `maropost/api` to the "require" object in your own project's
+composer.json file.
+
+    {
+        "require": {
+            "maropost/api": "*"
+        }
+    }
+
+### Install from Source
+You can also just clone the API repository and use a PSR-4-compatible autoloader to load
+the library. Our testing file at `~/tests/index.php` gives one example of how to do this.
+You will need to view our composer.json file for the dependencies (listed under 
+"requires") and make sure you have them installed.
+
 ## Usage
 To use a service, first instantiate it, providing your Maropost AccountId
 and Auth Token. For example, to get your list of reports using the Reports
