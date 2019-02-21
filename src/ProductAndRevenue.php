@@ -47,7 +47,7 @@ class ProductAndRevenue
      * @param string $listIds
      * @param string $orderDateTime uses the format: YYYY-MM-DDTHH:MM:SS-05:00
      * @param string $orderStatus
-     * @param string $originalOrderId
+     * @param string $originalOrderId sets the original_order_id field
      * @param string $grandTotal
      * @param int|null $campaignId
      * @param string|null $couponCode
@@ -104,6 +104,62 @@ class ProductAndRevenue
         $object = (object)array("order" => $order);
         $params = ($requireUnique ? array("unique"=>"true") : array());
         return $this->_post("", $params, $object);
+    }
+
+    /**
+     * Updates an existing eCommerce order using unique original_order_id if the details are changed due to partial
+     * return or some other update.
+     *
+     * @param string $originalOrderId matches the original_order_id field of the order
+     * @param string $orderDateTime uses the format: YYYY-MM-DDTHH:MM:SS-05:00
+     * @param string $orderStatus
+     * @param int|null $campaignId
+     * @param string|null $couponCode
+     * @param OrderItemInput ...$orderItems restating of the orderItems
+     * @return OperationResult
+     */
+    public function updateOrderForOriginalOrderId(string $originalOrderId, string $orderDateTime, string $orderStatus,
+                                                  int $campaignId = null, string $couponCode = null,
+                                                  OrderItemInput... $orderItems
+    ) : OperationResult
+    {
+        $order = (object)array(
+            "order_date" => $orderDateTime,
+            "order_status" => $orderStatus,
+            "campaign_id" => $campaignId,
+            "coupon_code" => $couponCode,
+            "order_items" => $orderItems
+        );
+        $object = (object)array("order" => $order);
+        return $this->_post($originalOrderId, [], $object);
+    }
+
+    /**
+     * Updates an existing eCommerce order using unique order_id if the details are changed due to partial return or
+     * some other update.
+     *
+     * @param string $orderId matches the Maropost order_id field of the order
+     * @param string $orderDateTime uses the format: YYYY-MM-DDTHH:MM:SS-05:00
+     * @param string $orderStatus
+     * @param int|null $campaignId
+     * @param string|null $couponCode
+     * @param OrderItemInput ...$orderItems restating of the orderItems
+     * @return OperationResult
+     */
+    public function updateOrderForOrderId(string $orderId, string $orderDateTime, string $orderStatus,
+                                                  int $campaignId = null, string $couponCode = null,
+                                                  OrderItemInput... $orderItems
+    ) : OperationResult
+    {
+        $order = (object)array(
+            "order_date" => $orderDateTime,
+            "order_status" => $orderStatus,
+            "campaign_id" => $campaignId,
+            "coupon_code" => $couponCode,
+            "order_items" => $orderItems
+        );
+        $object = (object)array("order" => $order);
+        return $this->_post("find", array("where[id]" => $orderId), $object);
     }
 
     /**

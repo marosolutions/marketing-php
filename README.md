@@ -408,7 +408,31 @@ The specific APIs contained are:
      * `$grandTotal`
      * `$campaignId`
      * `$couponCode`
-     * `$orderItems`
+     * `...$orderItems`
+
+ - `updateOrderForOriginalOrderId(string $originalOrderId, string $orderDateTime, string $orderStatus,
+                                  int $campaignId = null, string $couponCode = null,
+                                  OrderItemInput... $orderItems)`
+     * Updates an existing eCommerce order using unique original_order_id if the details are changed due to partial
+      return or some other update.
+     * `$originalOrderId`: matches the original_order_id field of the order
+     * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
+     * `$orderStatus`
+     * `$campaignId`
+     * `$couponCode`
+     * `...$orderItems`: restating of the orderItems
+
+ - `updateOrderForOrderId(string $orderId, string $orderDateTime, string $orderStatus,
+                          int $campaignId = null, string $couponCode = null,
+                          OrderItemInput... $orderItems)`
+     * Updates an existing eCommerce order using unique order_id if the details are changed due to partial return or
+     * some other update.
+     * `$orderId`: matches the Maropost order_id field of the order
+     * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
+     * `$orderStatus`
+     * `$campaignId`
+     * `$couponCode`
+     * `...$orderItems`: restating of the orderItems
     
  - `deleteForOriginalOrderId(int $originalOrderId)`
      * Deletes the complete eCommerce order if the order is cancelled or 
@@ -424,13 +448,13 @@ The specific APIs contained are:
      * Deletes the specified product(s) from a complete eCommerce order if 
      the product(s) is cancelled or returned
      * `$originalOrderId`: matches the original_order_id field of the order
-     * `$productIds`: the product(s) to delete from the order
+     * `...$productIds`: the product(s) to delete from the order
 
  - `deleteProductsForOrderId(int $id, int... $productIds)`
      * Deletes the specified product(s) from a complete eCommerce order if 
      the product(s) is cancelled or returned
      * `$id`: Maropost order_id
-     * `$productIds`: the product(s) to delete from the order
+     * `...$productIds`: the product(s) to delete from the order
 
 ### Relational Tables
 
