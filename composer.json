@@ -2,6 +2,12 @@
   "name": "maropost/api",
   "description": "This package provides programmatic access to several Maropost services.",
   "require": {
-    "php": "^7.0"
+    "php": ">=7.2",
+    "nategood/httpful": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Maropost\\Api\\": "Maropost/Api"
+    }
   }
 }

@@ -63,6 +63,8 @@ var_dump($campaign->get());die;
 /*
 Ab Test Campaign API
 
+*/
+
 $abTestCamp = new Maropost\Api\AbTestCampaigns(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
 $groupAttr = [
     [
@@ -82,22 +84,21 @@ $groupAttr = [
         'percentage'    => '5',
     ]
 ];
-$createRes = $abTestCamp->createAbTest('Test Campaign test', 'someemail@from.com', 'reply-to@from.com', 'home address', 'en', $groupAttr, date('Y-m-d H:i:s'));
+$createRes = $abTestCamp->createAbTest('Test Campaign test', 'someemail@from.com', 'reply-to@from.com', 'home address', 'en', $groupAttr, 'Send Test');
 
 dd($createRes);
 
-*/
 
 
 /*
 Contacts Api
 */
 
-$contacts = new \Maropost\Api\Contacts(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
-
-dd($contacts->createOrUpdateContact(10135855,'metowrite@gmail.com', 'updated aashu', 'updated lastname')->getData());
-dd($contacts->createOrUpdateForList(1,'writetome@gmail.com', 'aashu', 'acharya', '23453245', '2354324453', 65, ['first_cust_field' => 'test passed'], [], [], false, false));
-dd($contacts->getForList(1));
-dd($contacts->getClicks(5));
-dd($contacts->getOpens(5));
-dd($contacts->getForEmail('rohit@gmail.com'));
+//$contacts = new \Maropost\Api\Contacts(1000, 'wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q');
+//
+//dd($contacts->createOrUpdateContact(10135855,'metowrite@gmail.com', 'updated aashu', 'updated lastname')->getData());
+//dd($contacts->createOrUpdateForList(1,'writetome@gmail.com', 'aashu', 'acharya', '23453245', '2354324453', 65, ['first_cust_field' => 'test passed'], [], [], false, false));
+//dd($contacts->getForList(1));
+//dd($contacts->getClicks(5));
+//dd($contacts->getOpens(5));
+//dd($contacts->getForEmail('rohit@gmail.com'));
