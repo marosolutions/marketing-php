@@ -176,9 +176,10 @@ trait Api {
      * @param string $resource
      * @param array $params
      * @param string|null $overrideRootResource
+     * @param mixed|null $object
      * @return OperationResult
      */
-    private function _delete(string $resource, array $params = [], string $overrideRootResource = null) : OperationResult
+    private function _delete(string $resource, array $params = [], string $overrideRootResource = null, $object = null) : OperationResult
     {
         try {
             $url = $this->url($overrideRootResource);
@@ -186,9 +187,17 @@ trait Api {
             $url .= '.json';
             $url .= $this->getQueryString($params);
 
-            $this->apiResponse = Request::delete($url)
-                ->addHeaders($this->getHttpHeaders())
-                ->send();
+            if (is_object($object)) {
+                $json = json_encode($object);
+                $this->apiResponse = Request::delete($url, $json)
+                    ->addHeaders($this->getHttpHeaders())
+                    ->send();
+            }
+            else {
+                $this->apiResponse = Request::delete($url)
+                    ->addHeaders($this->getHttpHeaders())
+                    ->send();
+            }
 
         } catch (\Exception $e) {
 
