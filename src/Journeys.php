@@ -108,7 +108,7 @@ class Journeys
      */
 	public function pauseJourneyForContact(int $journeyId, int $contactId) : OperationResult
 	{
-        $result = $this->_put($journeyId."/stop/".$contactId, null);
+        $result = $this->_put($journeyId."/stop/".$contactId, []);
         return $result;
 	}
 
@@ -122,6 +122,7 @@ class Journeys
 	public function pauseJourneyForUid(int $journeyId, string $uid) : OperationResult
 	{
 	    $params["uid"] = $uid;
+	    // @TODO: this doesn't seem to work - throws 404 not found. need to figure out when the api docs gets back
         $result = $this->_put($journeyId."/stop", $params);
         return $result;
 	}
@@ -136,7 +137,7 @@ class Journeys
      */
 	public function resetJourneyForContact(int $journeyId, int $contactId) : OperationResult
 	{
-        $result = $this->_put($journeyId."/reset/".$contactId, null);
+        $result = $this->_put($journeyId."/reset/".$contactId, []);
 		return $result;
 	}
 
@@ -151,6 +152,7 @@ class Journeys
 	public function resetJourneyForUid(int $journeyId, string $uid) : OperationResult
 	{
 	    $params["uid"] = $uid;
+	    // @TODO: The url doesn't seem right - throws 404 page not found
         $result = $this->_put($journeyId."/reset", $params);
 		return $result;
 	}
@@ -165,7 +167,7 @@ class Journeys
      */
 	public function startJourneyForContact(int $journeyId, int $contactId) : OperationResult
 	{
-        $result = $this->_put($journeyId."/start/".$contactId, null);
+        $result = $this->_put($journeyId."/start/".$contactId, []);
         return $result;
 	}
 

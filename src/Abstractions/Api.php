@@ -157,8 +157,7 @@ trait Api {
                 $this->apiResponse = Request::put($url, $json)
                     ->addHeaders($this->getHttpHeaders())
                     ->send();
-            }
-            else {
+            } else {
                 $this->apiResponse = Request::put($url)
                     ->addHeaders($this->getHttpHeaders())
                     ->send();
