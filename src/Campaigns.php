@@ -30,7 +30,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function get(int $page): OperationResult
+    public function get(int $page = 1): OperationResult
     {
         return $this->_get(null, ['page' => $page]);
     }
@@ -42,7 +42,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getDeliveredReports(int $id, int $page): OperationResult
+    public function getDeliveredReports(int $id, int $page = 1): OperationResult
     {
         $overrideUrl = $this->resource . "/$id";
         return $this->_get('delivered_report', ['page' => $page], $overrideUrl);
@@ -56,7 +56,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getOpenReports(int $id, int $page, bool $unique = null): OperationResult
+    public function getOpenReports(int $id, bool $unique = null, int $page = 1): OperationResult
     {
         $params = ['page' => $page];
         if (!empty($unique)) {
@@ -75,7 +75,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getClickReports(int $id, int $page, bool $unique = null): OperationResult
+    public function getClickReports(int $id, bool $unique = null, int $page = 1): OperationResult
     {
         $params = ['page' => $page];
         if (!empty($unique)) {
@@ -94,7 +94,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getLinkReports(int $id, int $page, bool $unique = null): OperationResult
+    public function getLinkReports(int $id, bool $unique = null, int $page = 1): OperationResult
     {
         $params = ['page' => $page];
         if (!empty($unique)) {
@@ -113,7 +113,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getBounceReports(int $id, int $page): OperationResult
+    public function getBounceReports(int $id, int $page = 1): OperationResult
     {
         $overrideUrl = $this->resource . "/$id";
         return $this->_get('bounce_report', ['page' => $page], $overrideUrl);
@@ -152,7 +152,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getUnsubscribeReports(int $id, int $page): OperationResult
+    public function getUnsubscribeReports(int $id, int $page = 1): OperationResult
     {
 
         $overrideUrl = $this->resource . "/$id";
@@ -166,7 +166,7 @@ class Campaigns
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getComplaintReports(int $id, int $page): OperationResult
+    public function getComplaintReports(int $id, int $page = 1): OperationResult
     {
 
         $overrideUrl = $this->resource . "/$id";
