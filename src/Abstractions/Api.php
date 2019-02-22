@@ -98,7 +98,7 @@ trait Api {
             // gets in json format per api docs
             $url .= '.json';
             $url .= $this->getQueryString($params);
-echo "\n$url";
+
             $this->apiResponse = Request::get($url)->send();
 
         } catch (\Exception $e) {
@@ -126,7 +126,6 @@ echo "\n$url";
 
             $json = json_encode($object);
 
-            echo "{$url}";
             $this->apiResponse = Request::post($url, $json)
                 ->addHeaders($this->getHttpHeaders())
                 ->send();

@@ -295,6 +295,7 @@ class Contacts
         string $uid
     ): OperationResult
     {
+        // @TODO: need to figure out why uid as query params is throwing 500 error.
         $params = ['uid' => $uid];
 
         return $this->_delete('delete_all', $params);
