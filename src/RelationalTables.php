@@ -57,10 +57,6 @@ class RelationalTables
      */
 	public function create(KeyValue... $keyValues) : OperationResult
 	{
-	    // validate columns input
-	    //foreach ($keyValues as $key => $value) {
-        //}
-
 	    $object = (object)array("record" => (object)$keyValues);
 	    return $this->_post("create", [], $object);
 	}
@@ -68,7 +64,8 @@ class RelationalTables
     /**
      * Updates a record in the Relational Table.
      *
-     * @param KeyValue ...$keyValues a list of field name/values for the record to be updated.
+     * @param KeyValue ...$keyValues a list of field name/values for the record to be updated. NOTE: Any DateTime strings
+     * must be in one of three formats: "MM/DD/YYYY", "YYYY-MM-DD", or "YYYY-MM-DDThh:mm:ssTZD".
      * @return OperationResult
      */
 	public function update(KeyValue... $keyValues) : OperationResult
@@ -80,7 +77,8 @@ class RelationalTables
     /**
      * Creates or updates a record in the Relational Table.
      *
-     * @param KeyValue ...$keyValues a list of field name/values for the record to be created (or updated).
+     * @param KeyValue ...$keyValues a list of field name/values for the record to be created (or updated). NOTE: Any
+     * DateTime strings must be in one of three formats: "MM/DD/YYYY", "YYYY-MM-DD", or "YYYY-MM-DDThh:mm:ssTZD".
      * @return OperationResult
      */
     public function upsert(KeyValue... $keyValues) : OperationResult

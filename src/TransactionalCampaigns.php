@@ -24,12 +24,13 @@ class TransactionalCampaigns
     /**
      * Gets the list of Transaction Campaigns.
      *
+     * @param int $page page #. (>= 1)
      * @return GetResult
      */
-	public function get() : GetResult
+	public function get(int $page) : GetResult
 	{
         try {
-            return $this->_get('', []);
+            return $this->_get('', ['page' => $page]);
         } catch (\Exception $e) {
             die('exception ');
         }
