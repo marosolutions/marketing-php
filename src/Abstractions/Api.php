@@ -50,6 +50,8 @@ trait Api {
             $queryStr .= '&';
             $queryStr .= $key . '=' . $value;
         }
+        // replace spaces with + to have correct url format
+        $queryStr = str_replace(' ', '+', $queryStr);
 
         return $queryStr;
     }
@@ -123,7 +125,7 @@ echo "\n$url";
             $url .= $this->getQueryString($params);
 
             $json = json_encode($object);
-//            dd($json);
+
             echo "{$url}";
             $this->apiResponse = Request::post($url, $json)
                 ->addHeaders($this->getHttpHeaders())
