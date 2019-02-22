@@ -3,7 +3,7 @@
   "description": "This package provides programmatic access to several Maropost services.",
   "version": "0.1.0-dev",
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.0",
     "nategood/httpful": "~0.2.20"
   },
   "autoload": {
