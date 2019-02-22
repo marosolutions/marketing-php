@@ -47,7 +47,7 @@ class Contacts
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getOpens(int $contactId, int $page): OperationResult
+    public function getOpens(int $contactId, int $page = 1): OperationResult
     {
         $resource = "{$contactId}/open_report";
 
@@ -61,7 +61,7 @@ class Contacts
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getClicks(int $contactId, int $page): OperationResult
+    public function getClicks(int $contactId, int $page = 1): OperationResult
     {
         $resource = "{$contactId}/click_report";
 
@@ -75,7 +75,7 @@ class Contacts
      * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getForList(int $listId, int $page): OperationResult
+    public function getForList(int $listId, int $page = 1): OperationResult
     {
         $overrideResource = "lists/{$listId}";
 
@@ -240,8 +240,8 @@ class Contacts
         ];
         $options = $this->_discardNullAndEmptyValues($options);
 
-        if (!empty($options)) {
-            $contact['options'] = $options;
+        foreach ($options as $key => $option) {
+            $contact[$key] = $option;
         }
 
         return $this->_post('', [], (object) $contact);
