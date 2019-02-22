@@ -50,14 +50,14 @@ class Reports
      * @return OperationResult
      */
     public function getOpens(
+        int $page,
         array $fields = [],
         \DateTime $from = null,
         \DateTime $to = null,
         bool $unique = null,
         string $email = null,
         string $uid = null,
-        int $per = null,
-        int $page = 1
+        int $per = null
     ): OperationResult
     {
         $params = [
@@ -90,14 +90,14 @@ class Reports
      * @return OperationResult
      */
     public function getClicks(
+        int $page,
         array $fields = [],
         \DateTime $from = null,
         \DateTime $to = null,
         bool $unique = null,
         string $email = null,
         string $uid = null,
-        int $per = null,
-        int $page = 1
+        int $per = null
     ): OperationResult
     {
         $params = [
@@ -130,6 +130,7 @@ class Reports
      * @return OperationResult
      */
     public function getBounces(
+        int $page,
         array $fields = [],
         \DateTime $from = null,
         \DateTime $to = null,
@@ -137,8 +138,7 @@ class Reports
         string $email = null,
         string $uid = null,
         string $type = null,
-        int $per = null,
-        int $page = 1
+        int $per = null
     ): OperationResult
     {
         $params = [
@@ -172,14 +172,14 @@ class Reports
      * @return OperationResult
      */
     public function getUnsubscribes(
+        int $page,
         array $fields = [],
         \DateTime $from = null,
         \DateTime $to = null,
         bool $unique = null,
         string $email = null,
         string $uid = null,
-        int $per = null,
-        int $page = 1
+        int $per = null
     ): OperationResult
     {
         $params = [
@@ -212,14 +212,14 @@ class Reports
      * @return OperationResult
      */
     public function getComplaints(
+        int $page,
         array $fields = [],
         \DateTime $from = null,
         \DateTime $to = null,
         bool $unique = null,
         string $email = null,
         string $uid = null,
-        int $per = null,
-        int $page = 1
+        int $per = null
     ): OperationResult
     {
         $params = [
@@ -250,10 +250,10 @@ class Reports
      */
     public function getAbReports(
         string $name,
+        int $page,
         \DateTime $from = null,
         \DateTime $to = null,
-        int $per = null,
-        int $page = 1
+        int $per = null
     ): OperationResult
     {
         // resetting resource to make url appropriate
@@ -269,6 +269,7 @@ class Reports
         $sanitizedParams = $this->_discardNullAndEmptyValues($params);
 
         return $this->_get('ab_reports', $sanitizedParams);
+
     }
 
     /**
