@@ -10,7 +10,7 @@ use \Maropost\Api\ProductAndRevenue;
 final class ProductAndRevenueTests extends TestCase
 {
     const ACCOUNT_ID = 1000;
-    const AUTH_TOKEN = "wTX-esFcYzEMjSLEqkdWgGcf8yR7osiROc9uU-CjJXQDxMshn_SM-Q";
+    const AUTH_TOKEN = "";
 
     public function testGetOrder()
     {

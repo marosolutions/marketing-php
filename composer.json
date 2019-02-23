@@ -1,9 +1,9 @@
 {
   "name": "maropost/api",
   "description": "This package provides programmatic access to several Maropost services.",
-  "version": "0.1.0-dev",
+  "version": "1.0.0-beta",
   "require": {
-    "php": ">=7.0",
+    "php": "^7.0",
     "nategood/httpful": "~0.2.20"
   },
   "autoload": {
@@ -12,6 +12,6 @@
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "6.5"
+    "phpunit/phpunit": "^6.5"
   }
 }
