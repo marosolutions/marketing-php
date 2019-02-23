@@ -10,5 +10,8 @@
     "psr-4": {
       "Maropost\\Api\\": "src/"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.5"
   }
 }

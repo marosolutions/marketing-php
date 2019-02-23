@@ -27,6 +27,11 @@ class RelationalTables
         $this->resource = $tableName;
 	}
 
+	public static function init(int $accountId, string $authToken, string $tableName) : self
+    {
+        return new RelationalTables($accountId, $authToken, $tableName);
+    }
+
     /**
      * Gets the records of the Relational Table
      * @return GetResult
@@ -57,7 +62,13 @@ class RelationalTables
      */
 	public function create(KeyValue... $keyValues) : OperationResult
 	{
-	    $object = (object)array("record" => (object)$keyValues);
+	    $object = new \stdClass();
+        $array = [];
+	    foreach ($keyValues as $keyValue)
+	    {
+	        $array[$keyValue->key] = $keyValue->value;
+        }
+	    $object->record = (object)$array;
 	    return $this->_post("create", [], $object);
 	}
 
@@ -70,7 +81,13 @@ class RelationalTables
      */
 	public function update(KeyValue... $keyValues) : OperationResult
     {
-        $object = (object)array("record" => (object)$keyValues);
+        $object = new \stdClass();
+        $array = [];
+        foreach ($keyValues as $keyValue)
+        {
+            $array[$keyValue->key] = $keyValue->value;
+        }
+        $object->record = (object)$array;
         return $this->_put("update", [], (object)$keyValues);
     }
 
@@ -83,7 +100,13 @@ class RelationalTables
      */
     public function upsert(KeyValue... $keyValues) : OperationResult
     {
-        $object = (object)array("record" => (object)$keyValues);
+        $object = new \stdClass();
+        $array = [];
+        foreach ($keyValues as $keyValue)
+        {
+            $array[$keyValue->key] = $keyValue->value;
+        }
+        $object->record = (object)$array;
         return $this->_put("upsert", [], $object);
     }
 
@@ -96,7 +119,18 @@ class RelationalTables
      */
 	public function delete(string $idFieldName, $idFieldValue) : OperationResult
     {
-        return $this->_delete("delete", array($idFieldName => $idFieldValue));
+        $object = (object)array("record" => (object)array($idFieldName => $idFieldValue));
+        $result = $this->_delete("delete", [], null, $object);
+        if (!$result->isSuccess) {
+            // first check and ensure the record exists before attempting.
+            $showResult = $this->show($idFieldName, $idFieldValue);
+            if($showResult->isSuccess && property_exists($showResult->getData()->result, "error")) {
+                // it's not *really* an error, the field just doesn't exist.
+                $result = $showResult;
+                $result->errorMessage = $showResult->getData()->result->error;
+            }
+        }
+        return $result;
     }
 
     /**
