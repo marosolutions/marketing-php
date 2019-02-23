@@ -35,7 +35,6 @@ final class TransactionalCampaignsTests extends TestCase
         $this->assertTrue(is_array($data));
     }
 
-    /*
     public function testCreate()
     {
         $svc = new TransactionalCampaigns(self::ACCOUNT_ID, self::AUTH_TOKEN);
@@ -71,7 +70,6 @@ final class TransactionalCampaignsTests extends TestCase
         $this->assertEmpty($results->errorMessage);
         $this->assertNull($results->exception);
     }
-    */
 
     public function testSend()
     {
