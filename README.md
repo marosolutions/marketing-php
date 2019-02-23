@@ -401,56 +401,56 @@ The specific APIs contained are:
 #### Available methods:
 
  - `getOrder(int $id)`
-     * Gets a the specified order.
-     * `$id`: matches the original_order_id field of the order
+     * Gets the specified order
+ - `getOrderForOriginalOrderId(string $originalOrderId)`
+     * Gets the specified order
 
  - `createOrder(bool $requireUnique, string $contactEmail, string $contactFirstName, string $contactLastName,
-        array $customFields, array $addTags, array $removeTags, string $uid, string $listIds, string $orderDateTime,
-        string $orderStatus, string $originalOrderId, string $grandTotal, int $campaignId = null,
-        string $couponCode = null, OrderItemInput... $orderItems)`
+                string $orderDateTime, string $orderStatus, string $originalOrderId, array $orderItems,
+                array $customFields = null, array $addTags = null, array $removeTags = null,
+                string $uid = null, string $listIds = null, string $grandTotal = null,
+                int $campaignId = null, string $couponCode = null)`
      * Creates an order
      * `$requireUnique`: true to validate that the order has a unique original_order_id for the given contact.
      * `$contactEmail`
      * `$contactFirstName`
      * `$contactLastName`
-     * `$customFields`: associative array where the key (string) represents the field name and the value is the field value
-     * `$addTags`: simple array of tags to add (scalar values)
-     * `$removeTags`: simple array of tags to remove (scalar values)
-     * `$uid`
-     * `$listIds`
-     * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
+     * `$orderDateTime`: uses the format: "YYYY-MM-DDTHH:MM:SS-05:00"
      * `$orderStatus`
-     * `$originalOrderId`
+     * `$originalOrderId`: sets the original_order_id field
+     * `$orderItems` an array of \Maropost\Api\InputTypes\OrderItemInput objects.
+     * `$customFields` associative array where the key (string) represents the field name and the value is the field value
+     * `$addTags` simple array of tags to add (scalar values)
+     * `$removeTags` simple array of tags to remove (scalar values)
+     * `$uid`
+     * `$listIds` CSV list of IDs (e.g, "12,13")
      * `$grandTotal`
      * `$campaignId`
      * `$couponCode`
-     * `...$orderItems`
 
  - `updateOrderForOriginalOrderId(string $originalOrderId, string $orderDateTime, string $orderStatus,
-                                  int $campaignId = null, string $couponCode = null,
-                                  OrderItemInput... $orderItems)`
+                                  array $orderItems, int $campaignId = null, string $couponCode = null)`
      * Updates an existing eCommerce order using unique original_order_id if the details are changed due to partial
       return or some other update.
      * `$originalOrderId`: matches the original_order_id field of the order
      * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
      * `$orderStatus`
+     * `$orderItems`: restates the orderItems as as array of OrderItemInput objects.
      * `$campaignId`
      * `$couponCode`
-     * `...$orderItems`: restating of the orderItems
 
  - `updateOrderForOrderId(string $orderId, string $orderDateTime, string $orderStatus,
-                          int $campaignId = null, string $couponCode = null,
-                          OrderItemInput... $orderItems)`
+                          array $orderItems, int $campaignId = null, string $couponCode = null)`
      * Updates an existing eCommerce order using unique order_id if the details are changed due to partial return or
      * some other update.
      * `$orderId`: matches the Maropost order_id field of the order
      * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
      * `$orderStatus`
+     * `$orderItems`: restates the orderItems as as array of OrderItemInput objects.
      * `$campaignId`
      * `$couponCode`
-     * `...$orderItems`: restating of the orderItems
     
- - `deleteForOriginalOrderId(int $originalOrderId)`
+ - `deleteForOriginalOrderId(string $originalOrderId)`
      * Deletes the complete eCommerce order if the order is cancelled or 
      returned
      * `$originalOrderId` matches the original_order_id field of the order
@@ -460,17 +460,17 @@ The specific APIs contained are:
      returned using Maropost order id
      * `$id`: Maropost order_id
 
- - `deleteProductsForOriginalOrderId(int $originalOrderId, int... $productIds)`
+ - `deleteProductsForOriginalOrderId(string $originalOrderId, array $productIds)`
      * Deletes the specified product(s) from a complete eCommerce order if 
      the product(s) is cancelled or returned
      * `$originalOrderId`: matches the original_order_id field of the order
-     * `...$productIds`: the product(s) to delete from the order
+     * `$productIds`: the product(s) to delete from the order
 
- - `deleteProductsForOrderId(int $id, int... $productIds)`
+ - `deleteProductsForOrderId(int $id, array $productIds)`
      * Deletes the specified product(s) from a complete eCommerce order if 
      the product(s) is cancelled or returned
      * `$id`: Maropost order_id
-     * `...$productIds`: the product(s) to delete from the order
+     * `$productIds`: the product(s) to delete from the order
 
 ### Relational Tables
 
