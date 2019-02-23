@@ -71,30 +71,39 @@ The specific APIs contained are:
 
 #### Available methods:
 
- - `get()`
+ - `get(int $page)`
    - returns the list of campaigns for the account
- - `getBounceReports(int $id)`
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getBounceReports(int $id, int $page)`
    - returns the list of bounce reports for the given campaign ID
- - `getClickReports(int $id, bool unique = null)`
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getClickReports(int $id, int $page, bool unique = null)`
    - returns the list of click reports for the given campaign ID
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
    - `$unique`: `true` = get for unique contacts. Otherwise, `false`. 
- - `getComplaintReports(int $id)`
+ - `getComplaintReports(int $id, int $page)`
    - returns the list of complaint reports for the given campaign ID
- - `getDeliveredReports(int $id)`
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getDeliveredReports(int $id, int $page)`
    - returns the list of delivered reports for the given campaign ID
-   - `$unique`: `true` = get for unique contacts. Otherwise, `false`. 
- - `getHardBounceReports(int $id)`
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getHardBounceReports(int $id, int $page)`
    - returns the list of hard bounces for the given campaign ID
- - `getLinkReports(int $id, bool unique = null)`
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getLinkReports(int $id, int $page, bool unique = null)`
    - returns the list of link reports for the given campaign ID
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
    - `$unique`: `true` = get for unique contacts. Otherwise, `false`. 
- - `getOpenReports(int $id, bool unique = null)`
+ - `getOpenReports(int $id, int $page, bool unique = null)`
    - returns the list of open reports for the given campaign ID
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
    - `$unique`: `true` = get for unique contacts. Otherwise, `false`. 
- - `getSoftBounceReports(int $id)`
+ - `getSoftBounceReports(int $id, int $page)`
    - returns the list of soft bounce reports for the given campaign ID
- - `getUnsubscribeReports(int $id)`
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getUnsubscribeReports(int $id, int $page)`
    - returns the list of unsubscribe reports for the given campaign ID
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
    
 ### AB Test Campaigns
 #### Instantiation:
@@ -127,8 +136,9 @@ The specific APIs contained are:
     new Maropost.Api.TransactionalCampaigns($myAccountId, $myAuthToken)
 
 #### Available methods:
- - `get()`
+ - `get(int $page)`
      * returns the list of Transaction Campaigns
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
  - `create(string $name, string $subject, string $preheader,
         string $fromName, string $fromEmail, string $replyTo, 
         int $contentId, bool $emailPreviewLink, string $address,
@@ -206,14 +216,17 @@ The specific APIs contained are:
      * Gets the contact according to email address 
      * `$email`: Email address of the contact
 
- - `getOpens(int $contactId)`
-     * Gets a list of opens for the specified contact
+ - `getOpens(int $contactId, int $page)`
+   * Gets a list of opens for the specified contact
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
- - `getClicks(int $contactId)`
-     * Get a list of clicks for the specified contact
+ - `getClicks(int $contactId, int $page)`
+   * Get a list of clicks for the specified contact
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
- - `getForList(int $listId)`
-     * Get the list of contacts for the specified list
+ - `getForList(int $listId, int $page)`
+   * Get the list of contacts for the specified list
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
  - `createOrUpdateForList(
         int $listId,
@@ -304,7 +317,7 @@ The specific APIs contained are:
      * `$unsubscribeWorkflowIds`: simple array of list of IDs of workflows to unsubscribe the contact from
      * `$unsubscribeCampaign`: campaignID to unsubscribe the contact from
 
- - `public function deleteAll(string $email)`
+ - `deleteAll(string $email)`
      * Deletes specified contact from all lists
      * `$email`: email address of the contact
 
@@ -333,14 +346,17 @@ The specific APIs contained are:
 
 #### Available methods:
 
- - `get()`
+ - `get(int $page)`
      * Gets the list of journeys
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
- - `getCampaigns(int $journeyId)`
+ - `getCampaigns(int $journeyId, int $page)`
      * Gets the list of all campaigns for the specified journey
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
- - `getContacts(int $journeyId)`
+ - `getContacts(int $journeyId, int $page)`
      * Gets the list of all contacts for the specified journey
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
  - `stopAll(int $contactId, string $recipientEmail, string $uid)`
      * Stops all journeys, filtered for the matching parameters
@@ -385,56 +401,56 @@ The specific APIs contained are:
 #### Available methods:
 
  - `getOrder(int $id)`
-     * Gets a the specified order.
-     * `$id`: matches the original_order_id field of the order
+     * Gets the specified order
+ - `getOrderForOriginalOrderId(string $originalOrderId)`
+     * Gets the specified order
 
  - `createOrder(bool $requireUnique, string $contactEmail, string $contactFirstName, string $contactLastName,
-        array $customFields, array $addTags, array $removeTags, string $uid, string $listIds, string $orderDateTime,
-        string $orderStatus, string $originalOrderId, string $grandTotal, int $campaignId = null,
-        string $couponCode = null, OrderItemInput... $orderItems)`
+                string $orderDateTime, string $orderStatus, string $originalOrderId, array $orderItems,
+                array $customFields = null, array $addTags = null, array $removeTags = null,
+                string $uid = null, string $listIds = null, string $grandTotal = null,
+                int $campaignId = null, string $couponCode = null)`
      * Creates an order
      * `$requireUnique`: true to validate that the order has a unique original_order_id for the given contact.
      * `$contactEmail`
      * `$contactFirstName`
      * `$contactLastName`
-     * `$customFields`: associative array where the key (string) represents the field name and the value is the field value
-     * `$addTags`: simple array of tags to add (scalar values)
-     * `$removeTags`: simple array of tags to remove (scalar values)
-     * `$uid`
-     * `$listIds`
-     * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
+     * `$orderDateTime`: uses the format: "YYYY-MM-DDTHH:MM:SS-05:00"
      * `$orderStatus`
-     * `$originalOrderId`
+     * `$originalOrderId`: sets the original_order_id field
+     * `$orderItems` an array of \Maropost\Api\InputTypes\OrderItemInput objects.
+     * `$customFields` associative array where the key (string) represents the field name and the value is the field value
+     * `$addTags` simple array of tags to add (scalar values)
+     * `$removeTags` simple array of tags to remove (scalar values)
+     * `$uid`
+     * `$listIds` CSV list of IDs (e.g, "12,13")
      * `$grandTotal`
      * `$campaignId`
      * `$couponCode`
-     * `...$orderItems`
 
  - `updateOrderForOriginalOrderId(string $originalOrderId, string $orderDateTime, string $orderStatus,
-                                  int $campaignId = null, string $couponCode = null,
-                                  OrderItemInput... $orderItems)`
+                                  array $orderItems, int $campaignId = null, string $couponCode = null)`
      * Updates an existing eCommerce order using unique original_order_id if the details are changed due to partial
       return or some other update.
      * `$originalOrderId`: matches the original_order_id field of the order
      * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
      * `$orderStatus`
+     * `$orderItems`: restates the orderItems as as array of OrderItemInput objects.
      * `$campaignId`
      * `$couponCode`
-     * `...$orderItems`: restating of the orderItems
 
  - `updateOrderForOrderId(string $orderId, string $orderDateTime, string $orderStatus,
-                          int $campaignId = null, string $couponCode = null,
-                          OrderItemInput... $orderItems)`
+                          array $orderItems, int $campaignId = null, string $couponCode = null)`
      * Updates an existing eCommerce order using unique order_id if the details are changed due to partial return or
      * some other update.
      * `$orderId`: matches the Maropost order_id field of the order
      * `$orderDateTime`: uses the format: YYYY-MM-DDTHH:MM:SS-05:00
      * `$orderStatus`
+     * `$orderItems`: restates the orderItems as as array of OrderItemInput objects.
      * `$campaignId`
      * `$couponCode`
-     * `...$orderItems`: restating of the orderItems
     
- - `deleteForOriginalOrderId(int $originalOrderId)`
+ - `deleteForOriginalOrderId(string $originalOrderId)`
      * Deletes the complete eCommerce order if the order is cancelled or 
      returned
      * `$originalOrderId` matches the original_order_id field of the order
@@ -444,17 +460,17 @@ The specific APIs contained are:
      returned using Maropost order id
      * `$id`: Maropost order_id
 
- - `deleteProductsForOriginalOrderId(int $originalOrderId, int... $productIds)`
+ - `deleteProductsForOriginalOrderId(string $originalOrderId, array $productIds)`
      * Deletes the specified product(s) from a complete eCommerce order if 
      the product(s) is cancelled or returned
      * `$originalOrderId`: matches the original_order_id field of the order
-     * `...$productIds`: the product(s) to delete from the order
+     * `$productIds`: the product(s) to delete from the order
 
- - `deleteProductsForOrderId(int $id, int... $productIds)`
+ - `deleteProductsForOrderId(int $id, array $productIds)`
      * Deletes the specified product(s) from a complete eCommerce order if 
      the product(s) is cancelled or returned
      * `$id`: Maropost order_id
-     * `...$productIds`: the product(s) to delete from the order
+     * `$productIds`: the product(s) to delete from the order
 
 ### Relational Tables
 
@@ -484,22 +500,38 @@ set.
 
  - `create(KeyValue... $keyValues)`
      * Adds a record to the Relational Table
-     * `$keyValues`: Array of `Maropost.Api.InputTypes.KeyValue` objects,
-     each item consisting of two fields:
+     * `...$keyValues`: Multiple `Maropost.Api.InputTypes.KeyValue` objects, for the
+     record to be created, each item consisting of two fields:
        - `$key`: string representing the name of the field
-       - `$value`: scalar value representing the new value for the field
-
- - `update(KeyValue... $keyValues)`
-     * Updates the given fields of a record in the Relational Table
-     * `$keyValues`: Array of `Maropost.Api.InputTypes.KeyValue` objects,
-     each item consisting of two fields:
-       - `$key`: string representing the name of the field
-       - `$value`: scalar value representing the new value for the field
+       - `$value`: scalar value representing the new value for the field.
+         - Any DateTime strings must be in one of three formats: "MM/DD/YYYY", 
+         "YYYY-MM-DD", or "YYYY-MM-DDThh:mm:ssTZD".
        - NOTE: One of the KeyValues must represent the unique identifier.
 
- - `delete(int $id)`
+ - `update(KeyValue... $keyValues)`
+     * Updates a record in the Relational Table.
+     * `...$keyValues`: Multiple `Maropost.Api.InputTypes.KeyValue` objects, for the
+     record to be updated, each item consisting of two fields:
+       - `$key`: string representing the name of the field
+       - `$value`: scalar value representing the new value for the field.
+         - Any DateTime strings must be in one of three formats: "MM/DD/YYYY", 
+         "YYYY-MM-DD", or "YYYY-MM-DDThh:mm:ssTZD".
+       - NOTE: One of the KeyValues must represent the unique identifier.
+
+ - `upsert(KeyValue... $keyValues)`
+     * Creates or updates a record in the Relational Table.
+     * `...$keyValues`: Multiple `Maropost.Api.InputTypes.KeyValue` objects, for the
+     record to be created or updated, each item consisting of two fields:
+       - `$key`: string representing the name of the field
+       - `$value`: scalar value representing the new value for the field.
+         - Any DateTime strings must be in one of three formats: "MM/DD/YYYY", 
+         "YYYY-MM-DD", or "YYYY-MM-DDThh:mm:ssTZD".
+       - NOTE: One of the KeyValues must represent the unique identifier.
+
+ - `delete(int $idFieldName, $idFieldValue)`
      * Deletes the given record of the Relational Table
-     * `$id`: ID of the Relational Table to delete
+     * `$idFieldName` name of the field representing the unique identifier (E.g., "id", "email")
+     * `$idFieldValue` value of the identifier field, for the record to delete.
 
 ### Reports
 
@@ -508,10 +540,12 @@ set.
     new Maropost.Api.Reports($myAccountId, $myAuthToken)
 
 #### Available methods:
- - `get()`
+ - `get(int $page)`
    - returns the list of reports
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
 
  - `getOpens(
+        int $page,
         array $fields = [],
         string $from = null,
         string $to = null,
@@ -520,15 +554,18 @@ set.
         string $uid = null,
         int $per = null
     )`
-     * returns the list of open reports based on filters and fields provided
-     * `$fields`: contact field names to retrieve
-     * `$from`: the beginning of date range filter
-     * `$to`: the end of the date range filter
-     * `$unique`: when true, gets only unique opens
-     * `$email`: filters by provided email in the contact
-     * `$uid`: filters by uid
-     * `$per`: determines how many records per request to receive
+   * returns the list of open reports based on filters and fields provided
+   - `$page`: page # (>= 1). Up to 200 records returned per page.
+   * `$fields`: contact field names to retrieve
+   * `$from`: the beginning of date range filter
+   * `$to`: the end of the date range filter
+   * `$unique`: when true, gets only unique opens
+   * `$email`: filters by provided email in the contact
+   * `$uid`: filters by uid
+   * `$per`: determines how many records per request to receive
+
  - `getClicks(
+        int $page,
         array $fields = [],
         string $from = null,
         string $to = null,
@@ -537,16 +574,18 @@ set.
         string $uid = null,
         int $per = null
     )`
-     * returns the list of click reports
-     * `$fields`: plucks these contact fields if they exist
-     * `$from`: start of specific date range filter
-     * `$to`: end of date range filter
-     * `$unique`: if true, gets unique records
-     * `$email`: gets Clicks for specific email
-     * `$uid`: gets Clicks for provided uid
-     * `$per`: gets the specified number of records
+   * returns the list of click reports
+   * `$page`: page # (>= 1). Up to 200 records returned per page.
+   * `$fields`: plucks these contact fields if they exist
+   * `$from`: start of specific date range filter
+   * `$to`: end of date range filter
+   * `$unique`: if true, gets unique records
+   * `$email`: gets Clicks for specific email
+   * `$uid`: gets Clicks for provided uid
+   * `$per`: gets the specified number of records
 
  - `getBounces(
+        int $page,
         array $fields = [],
         string $from = null,
         string $to = null,
@@ -556,16 +595,18 @@ set.
         string $type = null,
         int $per = null
     )`
-     * returns the list of bounce reports
-     * `$fields`: plucks these contact fields if they exist
-     * `$from`: start of specific date range filter
-     * `$to`: end of date range filter
-     * `$unique`: if true, gets unique records
-     * `$email`: gets Bounces for specific email
-     * `$uid`: gets Bounces for provided uid
-     * `$per`: gets the specified number of records
+   * returns the list of bounce reports
+   * `$page`: page # (>= 1). Up to 200 records returned per page.
+   * `$fields`: plucks these contact fields if they exist
+   * `$from`: start of specific date range filter
+   * `$to`: end of date range filter
+   * `$unique`: if true, gets unique records
+   * `$email`: gets Bounces for specific email
+   * `$uid`: gets Bounces for provided uid
+   * `$per`: gets the specified number of records
 
  - `getUnsubscribes(
+        int $page,
         array $fields = [],
         string $from = null,
         string $to = null,
@@ -574,14 +615,15 @@ set.
         string $uid = null,
         int $per = null
     )`
-     * returns the list of Unsubscribes with provided filter constraints
-     * `$fields`: plucks these contact fields if they exist
-     * `$from`: start of specific date range filter
-     * `$to`: end of date range filter
-     * `$unique` if true, gets unique records
-     * `$email` gets Unsubscribes for specific email
-     * `$uid` gets Unsubscribes for provided uid
-     * `$per` gets the specified number of records
+   * returns the list of Unsubscribes with provided filter constraints
+   * `$page`: page # (>= 1). Up to 200 records returned per page.
+   * `$fields`: plucks these contact fields if they exist
+   * `$from`: start of specific date range filter
+   * `$to`: end of date range filter
+   * `$unique` if true, gets unique records
+   * `$email` gets Unsubscribes for specific email
+   * `$uid` gets Unsubscribes for provided uid
+   * `$per` gets the specified number of records
 
  - `getComplaints(
         array $fields = [],
@@ -592,26 +634,30 @@ set.
         string $uid = null,
         int $per = null
     )`
-     * returns the list of complaints filtered by provided params
-     * `$fields`: plucks these contact fields if they exist
-     * `$from`: start of specific date range filter
-     * `$to`: end of date range filter
-     * `$unique`: if true, gets unique records
-     * `$email`: gets Complaints for specific email
-     * `$uid`: gets Complaints for provided uid
-     * `$per`: gets the specified number of records
+   * returns the list of complaints filtered by provided params
+   * `$page`: page # (>= 1). Up to 200 records returned per page.
+   * `$fields`: plucks these contact fields if they exist
+   * `$from`: start of specific date range filter
+   * `$to`: end of date range filter
+   * `$unique`: if true, gets unique records
+   * `$email`: gets Complaints for specific email
+   * `$uid`: gets Complaints for provided uid
+   * `$per`: gets the specified number of records
 
  - `getAbReports(
-        string $name = '',
+        string $name,
+        int $page,
         string $from = null,
         string $to = null,
         int $per = null
     )`
-     * returns the list of Ab Reports
-     * `$name`: to get ab_reports with mentioned name
-     * `$from`: beginning of date range filter
-     * `$to`: end of date range filter
-     * `$per`: gets the mentioned number of reports
+   * returns the list of Ab Reports
+   * `$name`: to get ab_reports with mentioned name
+   * `$page`: page # (>= 1). Up to 200 records returned per page.
+   * `$from`: beginning of date range filter
+   * `$to`: end of date range filter
+   * `$per`: gets the mentioned number of reports
 
- - `getJourneys()`
-     * returns the list of all Journeys
+ - `getJourneys(int $page)`
+   * returns the list of all Journeys
+   * `$page`: page # (>= 1). Up to 200 records returned per page.

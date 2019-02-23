@@ -50,6 +50,8 @@ trait Api {
             $queryStr .= '&';
             $queryStr .= $key . '=' . $value;
         }
+        // replace spaces with + to have correct url format
+        $queryStr = str_replace(' ', '+', $queryStr);
 
         return $queryStr;
     }
@@ -96,7 +98,7 @@ trait Api {
             // gets in json format per api docs
             $url .= '.json';
             $url .= $this->getQueryString($params);
-echo "\n$url";
+
             $this->apiResponse = Request::get($url)->send();
 
         } catch (\Exception $e) {
@@ -123,8 +125,7 @@ echo "\n$url";
             $url .= $this->getQueryString($params);
 
             $json = json_encode($object);
-//            dd($json);
-            echo "{$url}";
+
             $this->apiResponse = Request::post($url, $json)
                 ->addHeaders($this->getHttpHeaders())
                 ->send();
@@ -156,8 +157,7 @@ echo "\n$url";
                 $this->apiResponse = Request::put($url, $json)
                     ->addHeaders($this->getHttpHeaders())
                     ->send();
-            }
-            else {
+            } else {
                 $this->apiResponse = Request::put($url)
                     ->addHeaders($this->getHttpHeaders())
                     ->send();
@@ -176,9 +176,10 @@ echo "\n$url";
      * @param string $resource
      * @param array $params
      * @param string|null $overrideRootResource
+     * @param mixed|null $object
      * @return OperationResult
      */
-    private function _delete(string $resource, array $params = [], string $overrideRootResource = null) : OperationResult
+    private function _delete(string $resource, array $params = [], string $overrideRootResource = null, $object = null) : OperationResult
     {
         try {
             $url = $this->url($overrideRootResource);
@@ -186,9 +187,18 @@ echo "\n$url";
             $url .= '.json';
             $url .= $this->getQueryString($params);
 
-            $this->apiResponse = Request::delete($url)
-                ->addHeaders($this->getHttpHeaders())
-                ->send();
+            if (is_object($object)) {
+                $json = json_encode($object);
+                $this->apiResponse = Request::delete($url)
+                    ->body($json)
+                    ->addHeaders($this->getHttpHeaders())
+                    ->send();
+            }
+            else {
+                $this->apiResponse = Request::delete($url)
+                    ->addHeaders($this->getHttpHeaders())
+                    ->send();
+            }
 
         } catch (\Exception $e) {
 

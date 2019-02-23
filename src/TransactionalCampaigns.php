@@ -24,12 +24,13 @@ class TransactionalCampaigns
     /**
      * Gets the list of Transaction Campaigns.
      *
+     * @param int $page page #. (>= 1)
      * @return GetResult
      */
-	public function get() : GetResult
+	public function get(int $page) : GetResult
 	{
         try {
-            return $this->_get('', []);
+            return $this->_get('', ['page' => $page]);
         } catch (\Exception $e) {
             die('exception ');
         }
@@ -75,9 +76,12 @@ class TransactionalCampaigns
           "content_id" => strval($contentId),
           "email_preview_link" => $emailPreviewLink,
           "address" => $address,
-          "language" => $language,
-          "add_ctags" => $ctags
+          "language" => $language
         ];
+	    if (count($ctags) > 0) {
+	        $campaign->add_ctags = $ctags;
+        }
+
 	    $object = (object)["campaign" => $campaign];
 	    $result = $this->_post("", [], $object);
 		return $result;
@@ -136,37 +140,46 @@ class TransactionalCampaigns
 	{
 	    $emailObj = new \stdClass();
         $emailObj->campaign_id = $campaignId;
-	    if (is_null($contentId)) {
+        $contentFlag = 0; // nothing provided
+        if (!is_null($contentId)) {
+            $emailObj->content_id = $contentId;
+            $contentFlag = 1; // contentId provided
+        }
+        if ($contentHtmlPart || $contentTextPart || $contentName) {
             $emailObj->content = (object)array(
                 "name" => $contentName,
                 "html_part" => $contentHtmlPart,
                 "text_part" => $contentTextPart
             );
+            $contentFlag = $contentFlag | 2; // content field(s) provided
         }
-	    else {
-            $emailObj->content_id = $contentId;
+        if ($contentFlag == 3) {
+            return new GetResult(null, "You may provide EITHER a contentId OR content field values, but not both.");
         }
 	    if (is_null($contactId)) {
             if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
                 return new GetResult(null, "You must provide a well-formed recipientEmail because contactId is null.");
-            }
-            if (!is_array($tags)) {
-                return new GetResult(null, "Provided 'recipientCustomFields' array is not actually an array.");
-                // TODO: Given the type-hinting in the function signature, is this even possible?
-            }
-            foreach ($recipientCustomFields as $key => $value) {
-                if (!is_string($key)) {
-                    return new GetResult(null, "All keys in your recipientCustomFields array must be strings.");
-                }
-                if (!is_scalar($value)) {
-                    return new GetResult(null, "All values in your recipientCustomFields array must be non-null scalars (string, float, bool, int).");
-                }
             }
             $emailObj->contact = (object)array(
                 "email" => $recipientEmail,
                 "first_name" => $recipientFirstName,
                 "last_name" => $recipientLastName
             );
+            if (!is_null($recipientCustomFields)) {
+                if (!is_array($recipientCustomFields)) {
+                    return new GetResult(null, "Provided 'recipientCustomFields' array is not actually an array.");
+                    // TODO: Given the type-hinting in the function signature, is this even possible?
+                }
+                foreach ($recipientCustomFields as $key => $value) {
+                    if (!is_string($key)) {
+                        return new GetResult(null, "All keys in your recipientCustomFields array must be strings.");
+                    }
+                    if (!is_scalar($value)) {
+                        return new GetResult(null, "All values in your recipientCustomFields array must be non-null scalars (string, float, bool, int).");
+                    }
+                }
+                $emailObj->custom_field = (object)$recipientCustomFields;
+            }
         }
         else {
             $emailObj->contact_id = $contactId;
@@ -204,7 +217,7 @@ class TransactionalCampaigns
 	            return new GetResult(null, "When providing a bccEmail, it needs to be a well-formed email address.");
             }
         }
-	    if (sizeof($tags) != 0) {
+	    if (!empty($tags)) {
 	        if (!is_array($tags)) {
                 return new GetResult(null, "Provided 'tags' array is not actually an array.");
                 // TODO: Given the type-hinting in the function signature, is this even possible?
@@ -217,10 +230,10 @@ class TransactionalCampaigns
 	                return new GetResult(null, "All values in your tags array must be non-null scalars (string, float, bool, int).");
                 }
             }
-	        $emailObj->tags = $tags;
+	        $emailObj->tags = (object)$tags;
         }
-	    if (sizeof($ctags) != 0) {
-            if (!is_array($tags)) {
+	    if (!empty($ctags)) {
+            if (!is_array($ctags)) {
                 return new GetResult(null, "Provided 'ctags' array is not actually an array.");
                 // TODO: Given the type-hinting in the function signature, is this even possible?
             }

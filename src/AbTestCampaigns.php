@@ -60,7 +60,7 @@ class AbTestCampaigns
         string $language,
         array $campaignGroupsAttributes,
         string $commit,
-        string $sendAt = null,
+        \DateTime $sendAt,
         int $brandId = null,
         array $suppressedListIds = [],
         array $suppressedSegmentIds = [],
@@ -91,6 +91,14 @@ class AbTestCampaigns
             $cTags,
             $segments
         );
+
+        /*
+        * @Todo: this needs to be escalated to the Core Api Team, as there is no documentation to resolve errors like these
+        * seems like validation errors, but without resolution guidance in the docs.
+        * Winning criteria must be selected
+        * Campaign groups can't be less than two.
+        * No recipients were selected.
+        */
 
         return $this->_post('ab_test', [], $object);
     }
@@ -123,7 +131,7 @@ class AbTestCampaigns
         string $language,
         array $campaignGroupsAttributes,
         string $commit,
-        string $sendAt = null,
+        \DateTime $sendAt = null,
         int $brandId = null,
         array $suppressedListIds = [],
         array $suppressedSegmentIds = [],
@@ -141,7 +149,7 @@ class AbTestCampaigns
             'reply_to' => $replyTo,
             'address' => $address,
             'language' => $language,
-            'send_at' => $sendAt,
+            'send_at' => $sendAt->format('Y-m-d H:i:s'),
             'commit' => $commit,
             'brand_id' => $brandId,
             'email_preview_link' => $emailPreviewLink,
@@ -163,11 +171,11 @@ class AbTestCampaigns
             $param = $this->_discardNullAndEmptyValues($param);
 
             if (!empty($param)) {
-                $abTestCampaign[$key] = (object) $param;
+                $abTestCampaign[$key] = (object)$param;
             }
         }
 
-        return (object) $abTestCampaign;
+        return (object)$abTestCampaign;
     }
 
 }

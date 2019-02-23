@@ -34,7 +34,7 @@ class Contacts
     public function getForEmail(string $email): OperationResult
     {
         $emailInUriFormat = [
-            'contact[email]' => $email
+            'contact[email]' => $email,
         ];
 
         return $this->_get('email', $emailInUriFormat);
@@ -44,39 +44,42 @@ class Contacts
      * Gets a list of opens for a contact
      *
      * @param int $contactId Id of the Contact
+     * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getOpens(int $contactId): OperationResult
+    public function getOpens(int $contactId, int $page): OperationResult
     {
         $resource = "{$contactId}/open_report";
 
-        return $this->_get($resource);
+        return $this->_get($resource, ['page' => $page]);
     }
 
     /**
      * Get a list of clicks for a contact
      *
      * @param int $contactId
+     * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getClicks(int $contactId): OperationResult
+    public function getClicks(int $contactId, int $page): OperationResult
     {
         $resource = "{$contactId}/click_report";
 
-        return $this->_get($resource);
+        return $this->_get($resource, ['page' => $page]);
     }
 
     /**
      * Get a list of contacts in the specified list
      *
      * @param int $listId
+     * @param int $page page #. (>= 1)
      * @return OperationResult
      */
-    public function getForList(int $listId): OperationResult
+    public function getForList(int $listId, int $page): OperationResult
     {
         $overrideResource = "lists/{$listId}";
 
-        return $this->_get('contacts', [], $overrideResource);
+        return $this->_get('contacts', ['page' => $page], $overrideResource);
     }
 
     /**
@@ -237,8 +240,8 @@ class Contacts
         ];
         $options = $this->_discardNullAndEmptyValues($options);
 
-        if (!empty($options)) {
-            $contact['options'] = $options;
+        foreach ($options as $fieldName => $option) {
+            $contact[$fieldName] = $optioin;
         }
 
         return $this->_post('', [], (object) $contact);
@@ -292,6 +295,7 @@ class Contacts
         string $uid
     ): OperationResult
     {
+        // @TODO: need to figure out why uid as query params is throwing 500 error.
         $params = ['uid' => $uid];
 
         return $this->_delete('delete_all', $params);

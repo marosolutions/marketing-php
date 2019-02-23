@@ -24,12 +24,13 @@ class Journeys
     /**
      * Gets the list of journeys.
      *
+     * @param int $page page #. (>= 1)
      * @return GetResult
      */
-	public function get() : OperationResult
+	public function get(int $page) : OperationResult
 	{
         try {
-            return $this->_get('', []);
+            return $this->_get('', ['page' => $page]);
         } catch (\Exception $e) {
             die('exception ');
         }
@@ -39,12 +40,13 @@ class Journeys
      * Gets the list of all campaigns for the specified journey.
      *
      * @param int $journeyId
+     * @param int $page page #. (>= 1)
      * @return GetResult
      */
-	public function getCampaigns(int $journeyId) : OperationResult
+	public function getCampaigns(int $journeyId, int $page) : OperationResult
 	{
         try {
-            return $this->_get($journeyId."/journey_campaigns", []);
+            return $this->_get($journeyId."/journey_campaigns", ['page' => $page]);
         } catch (\Exception $e) {
             die('exception ');
         }
@@ -54,12 +56,13 @@ class Journeys
      * Gets the list of all contacts for the specified journey.
      *
      * @param int $journeyId
+     * @param int $page page #. (>= 1)
      * @return GetResult
      */
-	public function getContacts(int $journeyId) : OperationResult
+	public function getContacts(int $journeyId, int $page) : OperationResult
 	{
         try {
-            return $this->_get($journeyId."/journey_contacts", []);
+            return $this->_get($journeyId."/journey_contacts", ['page' => $page]);
         } catch (\Exception $e) {
             die('exception ');
         }
@@ -71,24 +74,27 @@ class Journeys
      * @param int $contactId this filter ignored if not greater than 0.
      * @param string $recipientEmail this filter ignored if null.
      * @param string $uid this filter ignored if null.
+     * @param int $page page #. (>= 1)
      * @return OperationResult
      */
 	public function stopAll(
 	    int $contactId,
         string $recipientEmail,
-        string $uid
+        string $uid,
+        int $page
     ) : OperationResult
 	{
 	    $params = [];
 	    if ($contactId > 0) {
-	        array_push($params, "contact_id", $contactId);
+	        $params['contact_id'] = $contactId;
         }
 	    if ($recipientEmail != null) {
-	        array_push($params, "email", $recipientEmail);
+	        $params['email'] = $recipientEmail;
         }
 	    if ($uid != null) {
-	        array_push($params, "uid", $uid);
+	        $params['uid'] = $uid;
         }
+	    $params['page'] = $page;
 		$result = $this->_put("stop_all_journeys", $params);
 		return $result;
 	}
@@ -102,7 +108,7 @@ class Journeys
      */
 	public function pauseJourneyForContact(int $journeyId, int $contactId) : OperationResult
 	{
-        $result = $this->_put($journeyId."/stop/".$contactId, null);
+        $result = $this->_put($journeyId."/stop/".$contactId, []);
         return $result;
 	}
 
@@ -130,7 +136,7 @@ class Journeys
      */
 	public function resetJourneyForContact(int $journeyId, int $contactId) : OperationResult
 	{
-        $result = $this->_put($journeyId."/reset/".$contactId, null);
+        $result = $this->_put($journeyId."/reset/".$contactId, []);
 		return $result;
 	}
 
@@ -159,7 +165,7 @@ class Journeys
      */
 	public function startJourneyForContact(int $journeyId, int $contactId) : OperationResult
 	{
-        $result = $this->_put($journeyId."/start/".$contactId, null);
+        $result = $this->_put($journeyId."/start/".$contactId, []);
         return $result;
 	}
 
