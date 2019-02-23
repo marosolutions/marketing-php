@@ -439,7 +439,7 @@ The specific APIs contained are:
      * `$campaignId`
      * `$couponCode`
 
- - `updateOrderForOrderId(string $orderId, string $orderDateTime, string $orderStatus,
+ - `updateOrderForOrderId(int $orderId, string $orderDateTime, string $orderStatus,
                           array $orderItems, int $campaignId = null, string $couponCode = null)`
      * Updates an existing eCommerce order using unique order_id if the details are changed due to partial return or
      * some other update.
