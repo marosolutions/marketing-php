@@ -189,7 +189,8 @@ trait Api {
 
             if (is_object($object)) {
                 $json = json_encode($object);
-                $this->apiResponse = Request::delete($url, $json)
+                $this->apiResponse = Request::delete($url)
+                    ->body($json)
                     ->addHeaders($this->getHttpHeaders())
                     ->send();
             }
