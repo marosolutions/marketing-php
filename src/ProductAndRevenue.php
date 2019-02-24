@@ -99,10 +99,6 @@ class ProductAndRevenue
         }
 
         if (!empty($customFields)) {
-            if (!is_array($customFields)) {
-                return new GetResult(null, "Provided 'customFields' array is not actually an array.");
-                // TODO: Given the type-hinting in the function signature, is this even possible?
-            }
             foreach ($customFields as $key => $value) {
                 if (!is_string($key)) {
                     return new GetResult(null, "All keys in your 'customFields' array must be strings.");

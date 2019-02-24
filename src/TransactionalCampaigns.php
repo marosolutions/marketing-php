@@ -166,10 +166,6 @@ class TransactionalCampaigns
                 "last_name" => $recipientLastName
             );
             if (!is_null($recipientCustomFields)) {
-                if (!is_array($recipientCustomFields)) {
-                    return new GetResult(null, "Provided 'recipientCustomFields' array is not actually an array.");
-                    // TODO: Given the type-hinting in the function signature, is this even possible?
-                }
                 foreach ($recipientCustomFields as $key => $value) {
                     if (!is_string($key)) {
                         return new GetResult(null, "All keys in your recipientCustomFields array must be strings.");
@@ -218,10 +214,6 @@ class TransactionalCampaigns
             }
         }
 	    if (!empty($tags)) {
-	        if (!is_array($tags)) {
-                return new GetResult(null, "Provided 'tags' array is not actually an array.");
-                // TODO: Given the type-hinting in the function signature, is this even possible?
-            }
 	        foreach ($tags as $key => $value) {
 	            if (!is_string($key)) {
                     return new GetResult(null, "All keys in your tags array must be strings.");
@@ -233,10 +225,6 @@ class TransactionalCampaigns
 	        $emailObj->tags = (object)$tags;
         }
 	    if (!empty($ctags)) {
-            if (!is_array($ctags)) {
-                return new GetResult(null, "Provided 'ctags' array is not actually an array.");
-                // TODO: Given the type-hinting in the function signature, is this even possible?
-            }
             foreach ($ctags as $value) {
                 if (!is_scalar($value)) {
                     return new GetResult(null, "All values in your ctags array must be non-null scalars (string, float, bool, int).");
