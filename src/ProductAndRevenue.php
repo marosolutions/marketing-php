@@ -99,10 +99,6 @@ class ProductAndRevenue
         }
 
         if (!empty($customFields)) {
-            if (!is_array($customFields)) {
-                return new GetResult(null, "Provided 'customFields' array is not actually an array.");
-                // TODO: Given the type-hinting in the function signature, is this even possible?
-            }
             foreach ($customFields as $key => $value) {
                 if (!is_string($key)) {
                     return new GetResult(null, "All keys in your 'customFields' array must be strings.");
@@ -167,14 +163,14 @@ class ProductAndRevenue
             "order_items" => $orderItems
         );
         $object = (object)array("order" => $order);
-        return $this->_post($originalOrderId, [], $object);
+        return $this->_put($originalOrderId, [], $object);
     }
 
     /**
      * Updates an existing eCommerce order using unique order_id if the details are changed due to partial return or
      * some other update.
      *
-     * @param string $orderId matches the Maropost order_id field of the order
+     * @param int $orderId matches the Maropost order_id field of the order
      * @param string $orderDateTime uses the format: YYYY-MM-DDTHH:MM:SS-05:00
      * @param string $orderStatus
      * @param array $orderItems restates the orderItems as as array of OrderItemInput objects.
@@ -182,7 +178,7 @@ class ProductAndRevenue
      * @param string|null $couponCode
      * @return OperationResult
      */
-    public function updateOrderForOrderId(string $orderId, string $orderDateTime, string $orderStatus,
+    public function updateOrderForOrderId(int $orderId, string $orderDateTime, string $orderStatus,
                                           array $orderItems, int $campaignId = null, string $couponCode = null
     ) : OperationResult
     {
@@ -203,7 +199,7 @@ class ProductAndRevenue
             "order_items" => $orderItems
         );
         $object = (object)array("order" => $order);
-        return $this->_post("find", array("where[id]" => $orderId), $object);
+        return $this->_put("find", array("where[id]" => $orderId), $object);
     }
 
     /**

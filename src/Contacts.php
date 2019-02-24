@@ -241,7 +241,7 @@ class Contacts
         $options = $this->_discardNullAndEmptyValues($options);
 
         foreach ($options as $fieldName => $option) {
-            $contact[$fieldName] = $optioin;
+            $contact[$fieldName] = $option;
         }
 
         return $this->_post('', [], (object) $contact);
