@@ -36,6 +36,16 @@ class Campaigns
     }
 
     /**
+     * Gets the given campaign.
+     * @param int $campaignId
+     * @return OperationResult
+     */
+    public function getCampaign(int $campaignId): OperationResult
+    {
+        return $this->_get($campaignId, []);
+    }
+
+    /**
      * Gets the list of delivered report for the specified campaign
      *
      * @param int $id The campaign ID

@@ -74,6 +74,9 @@ The specific APIs contained are:
  - `get(int $page)`
    - returns the list of campaigns for the account
    - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getCampaign(int $campaignId)`
+   - returns the given campaign
+   - `$campaignId`
  - `getBounceReports(int $id, int $page)`
    - returns the list of bounce reports for the given campaign ID
    - `$page`: page # (>= 1). Up to 200 records returned per page.
