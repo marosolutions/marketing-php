@@ -74,6 +74,9 @@ The specific APIs contained are:
  - `get(int $page)`
    - returns the list of campaigns for the account
    - `$page`: page # (>= 1). Up to 200 records returned per page.
+ - `getCampaign(int $campaignId)`
+   - returns the given campaign
+   - `$campaignId`
  - `getBounceReports(int $id, int $page)`
    - returns the list of bounce reports for the given campaign ID
    - `$page`: page # (>= 1). Up to 200 records returned per page.
@@ -235,7 +238,7 @@ The specific APIs contained are:
         string $lastName = null,
         string $phone = null,
         string $fax = null,
-        int $uid = null,
+        string $uid = null,
         array $customField = [],
         array $addTags = [],
         array $removeTags = [],
@@ -263,7 +266,7 @@ The specific APIs contained are:
         string $lastName = null,
         string $phone = null,
         string $fax = null,
-        int $uid = null,
+        string $uid = null,
         array $customField = [],
         array $addTags = [],
         array $removeTags = [],
@@ -283,13 +286,13 @@ The specific APIs contained are:
      * `$removeTags`: tags to remove from the contact. Simple array of tag names (strings).
      * `$removeFromDNM`: set this true to subscribe contact to the list, and remove it from DNM
 
- - `createOrUpdateContacts(
+ - `createOrUpdateForListsAndWorkflows(
         string $email,
         string $firstName = null,
         string $lastName = null,
         string $phone = null,
         string $fax = null,
-        int $uid = null,
+        string $uid = null,
         array $customField = [],
         array $addTags = [],
         array $removeTags = [],
@@ -317,11 +320,11 @@ The specific APIs contained are:
      * `$unsubscribeWorkflowIds`: simple array of list of IDs of workflows to unsubscribe the contact from
      * `$unsubscribeCampaign`: campaignID to unsubscribe the contact from
 
- - `deleteAll(string $email)`
+ - `deleteFromAllLists(string $email)`
      * Deletes specified contact from all lists
      * `$email`: email address of the contact
 
- - `deleteContact(int $contactId, array $listIds = [])`
+ - `deleteFromLists(int $contactId, array $listIds = [])`
      * Deletes the specified contact from the specified lists
      * `$contactId`: id of the contact
      * `$listIds`: simple array of ids of the lists

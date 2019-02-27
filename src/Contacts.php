@@ -91,7 +91,7 @@ class Contacts
      * @param string|null $lastName Last name of Contact
      * @param string|null $phone Phone number of Contact
      * @param string|null $fax Fax number of Contact
-     * @param int|null $uid UID for the Contact
+     * @param string|null $uid UID for the Contact
      * @param array $customField Custom Fields passed as associative array. Keys represent the field names while values represent the values
      * @param array $addTags Tags to add to the contact. Simple array of tag names
      * @param array $removeTags Tags to remove from the contact. Simple array of tag names
@@ -106,7 +106,7 @@ class Contacts
         string $lastName = null,
         string $phone = null,
         string $fax = null,
-        int $uid = null,
+        string $uid = null,
         array $customField = [],
         array $addTags = [],
         array $removeTags = [],
@@ -131,34 +131,42 @@ class Contacts
 
         $overrideResource = "lists/{$listId}";
 
-        return $this->_post('contacts', [], (object)$contact, $overrideResource);
+        $object = new \stdClass();
+        $object->contact = (object)$contact;
+        $results = $this->getForEmail($email);
+        if ($results->isSuccess) {
+            $contactId = $results->getData()->id;
+            if (!is_null($contact)) {
+                // already exists. need to update.
+                return $this->_put('contacts/'.$contactId, [], $object, $overrideResource);
+            }
+        }
+        return $this->_post('contacts', [], $object, $overrideResource);
 
     }
 
     /**
      * Create a contact without a list. Updates if already existing email is passed.
      *
-     * @param int $contactId ID of the contact
-     * @param string $email Email address for the contact to be created|updated
-     * @param string|null $firstName Firstname of Contact
-     * @param string|null $lastName Last Name of Contact
-     * @param string|null $phone Phone number of Contact
-     * @param string|null $fax Fax of Contact
-     * @param int|null $uid UID the contact belongs to
+     * @param string $email email address for the contact to be created|updated
+     * @param string|null $firstName first name of Contact
+     * @param string|null $lastName last name of Contact
+     * @param string|null $phone phone number of Contact - no symbols  (e.g., "5555555555", not "555-555-5555")
+     * @param string|null $fax fax number of Contact - no symbols (e.g., "5555555555", not "555-555-5555")
+     * @param string|null $uid UID the contact belongs to
      * @param array $customField Custom Field passed as array. Keys represent the field names while values represent the values
      * @param array $addTags Tags to add to the contact. Non associated array of tagnames
      * @param array $removeTags Tags to remove from the contact. Non associative array of tagnames
-     * @param bool $removeFromDNM Set this true to subcribe contact to the list, and remove it from DNM)
+     * @param bool $removeFromDNM Set this true to subscribe contact to the list, and remove it from DNM)
      * @return OperationResult
      */
     public function createOrUpdateContact(
-        int $contactId,
         string $email,
         string $firstName = null,
         string $lastName = null,
         string $phone = null,
         string $fax = null,
-        int $uid = null,
+        string $uid = null,
         array $customField = [],
         array $addTags = [],
         array $removeTags = [],
@@ -178,19 +186,28 @@ class Contacts
             'remove_tags' => $removeTags
         ];
         $contact = $this->_discardNullAndEmptyValues($contact);
-
-        return $this->_put($contactId, [], (object)$contact);
+        $object = new \stdClass();
+        $object->contact = (object)$contact;
+        $results = $this->getForEmail($email);
+        if ($results->isSuccess) {
+            $contactId = $results->getData()->id;
+            if (!is_null($contact)) {
+                // already exists. need to update.
+                return $this->_put($contactId, [], $object);
+            }
+        }
+        return $this->_post("", [], $object);
     }
 
     /**
      * Creates or Updates Contact - Multiple lists can be subscribed, unsubscribed. Multiple workflows can be unsubscribed.
      *
      * @param string $email Email address for the contact to be created|updated
-     * @param string|null $firstName Firstname of Contact
-     * @param string|null $lastName Last Name of Contact
-     * @param string|null $phone Phone number of Contact
-     * @param string|null $fax Fax of Contact
-     * @param int|null $uid UID the contact belongs to
+     * @param string|null $firstName first name of Contact
+     * @param string|null $lastName last name of Contact
+     * @param string|null $phone phone number of Contact
+     * @param string|null $fax fax number of Contact
+     * @param string|null $uid UID the contact belongs to
      * @param array $customField Custom Field passed as array. Keys represent the field names while values represent the values
      * @param array $addTags Tags to add to the contact. Non associated array of tagnames
      * @param array $removeTags Tags to remove from the contact. Non associative array of tagnames
@@ -201,13 +218,13 @@ class Contacts
      * @param string|null $unsubscribeCampaign CampaignID to unsubscribe the contact from
      * @return OperationResult
      */
-    public function createOrUpdateContacts(
+    public function createOrUpdateForListsAndWorkflows(
         string $email,
         string $firstName = null,
         string $lastName = null,
         string $phone = null,
         string $fax = null,
-        int $uid = null,
+        string $uid = null,
         array $customField = [],
         array $addTags = [],
         array $removeTags = [],
@@ -233,18 +250,25 @@ class Contacts
         $contact = $this->_discardNullAndEmptyValues($contact);
 
         $options = [
-            'subscribe_list_ids' => $subscribeListIds,
-            'unsubscribe_list_ids' => $unsubscribeListIds,
-            'unsubscribe_workflow_ids'  => $unsubscribeWorkflowIds,
+            'subscribe_list_ids' => implode(",", $subscribeListIds),
+            'unsubscribe_list_ids' => implode(",", $unsubscribeListIds),
+            'unsubscribe_workflow_ids'  => implode(",", $unsubscribeWorkflowIds),
             'unsubscribe_campaign'  => $unsubscribeCampaign
         ];
         $options = $this->_discardNullAndEmptyValues($options);
+        $contact['options'] = $options;
 
-        foreach ($options as $fieldName => $option) {
-            $contact[$fieldName] = $option;
+        $object = new \stdClass();
+        $object->contact = (object)$contact;
+        $results = $this->getForEmail($email);
+        if ($results->isSuccess) {
+            $contactId = $results->getData()->id;
+            if (!is_null($contact)) {
+                // already exists. need to update.
+                return $this->_put($contactId, [], $object);
+            }
         }
-
-        return $this->_post('', [], (object) $contact);
+        return $this->_post('', [], $object);
     }
 
     /**
@@ -253,9 +277,7 @@ class Contacts
      * @param string $email
      * @return OperationResult
      */
-    public function deleteAll(
-        string $email
-    ): OperationResult
+    public function deleteFromAllLists(string $email): OperationResult
     {
         $emailAsArray = [
             'contact[email]' => $email
@@ -271,16 +293,12 @@ class Contacts
      * @param array $listIds
      * @return OperationResult
      */
-    public function deleteContact(
-        int $contactId,
-        array $listIds = []
-    ): OperationResult
+    public function deleteFromLists(int $contactId, array $listIds = []): OperationResult
     {
         $params = [];
         if (!empty($listIds)) {
             $params['list_ids'] = implode(',', $listIds);
         }
-
         return $this->_delete($contactId, $params);
 
     }
@@ -291,13 +309,9 @@ class Contacts
      * @param string $uid
      * @return OperationResult
      */
-    public function deleteContactForUid(
-        string $uid
-    ): OperationResult
+    public function deleteContactForUid(string $uid): OperationResult
     {
-        // @TODO: need to figure out why uid as query params is throwing 500 error.
         $params = ['uid' => $uid];
-
         return $this->_delete('delete_all', $params);
     }
 
@@ -308,34 +322,26 @@ class Contacts
      * @param int $contactId
      * @return OperationResult
      */
-    public function deleteListContact(
-        int $listId,
-        int $contactId
-    ): OperationResult
+    public function deleteListContact(int $listId, int $contactId): OperationResult
     {
         $overrideResource = "lists/{$listId}";
         $resource = "contacts/{$contactId}";
-
         return $this->_delete($resource, [], $overrideResource);
     }
 
     /**
-     * Unsubscribe contact having the email|uid as specified by the Value paramemter
+     * Unsubscribe contact having the email|uid as specified by the Value parameter
      *
      * @param string $contactFieldValue The value of the field to search the contact based on
      * @param string $contactFieldName The name of the field for which the value is being passed. For now, the possible
      *        values are: email or uid
      * @return OperationResult
      */
-    public function unsubscribeAll(
-        string $contactFieldValue,
-        string $contactFieldName = 'email'
-    ): OperationResult
+    public function unsubscribeAll(string $contactFieldValue, string $contactFieldName = 'email'): OperationResult
     {
         $params = [
             "contact[{$contactFieldName}]" => $contactFieldValue
         ];
-
         return $this->_put('unsubscribe_all', $params);
     }
 
