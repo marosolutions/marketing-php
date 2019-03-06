@@ -43,6 +43,13 @@ final class ReportsTests extends TestCase
         $this->assertNotEquals($createdAt2, $createdAt, "potential bug re: pagination in underlying REST API");
     }
 
+    public function testGetReport()
+    {
+        $report = new Reports(self::ACCOUNT_ID, self::AUTH_TOKEN);
+        $results = $report->getReport(1);
+        $this->makeBasicAssertions($results);
+    }
+
     public function testGetOpens()
     {
         $report = new Reports(self::ACCOUNT_ID, self::AUTH_TOKEN);

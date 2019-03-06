@@ -4,6 +4,7 @@ namespace Maropost\Api;
 
 use Maropost\Api\Abstractions\OperationResult;
 use Maropost\Api\Abstractions\Api;
+use Maropost\Api\ResultTypes\GetResult;
 
 /**
  * Class Contacts
@@ -83,6 +84,20 @@ class Contacts
     }
 
     /**
+     * Get the specified contact from the specified list
+     *
+     * @param int $listId
+     * @param int $contactId
+     * @return OperationResult
+     */
+    public function getContactForList(int $listId, int $contactId): OperationResult
+    {
+        $overrideResource = "lists/{$listId}";
+
+        return $this->_get("contacts/{$contactId}", [], $overrideResource);
+    }
+
+    /**
      * Create a contact within a list. Updates if previous contact is matched by email
      *
      * @param int $listId ID of the list for which the contact is being created
@@ -143,6 +158,62 @@ class Contacts
         }
         return $this->_post('contacts', [], $object, $overrideResource);
 
+    }
+
+    /**
+     * Create a contact within a list. Updates if previous contact is matched by email
+     *
+     * @param int $listId ID of the list to which the contact being updated belongs
+     * @param int $contactId ID of the contact being updated
+     * @param string $email Email address for the contact to be updated
+     * @param string|null $firstName first name of Contact
+     * @param string|null $lastName last name of Contact
+     * @param string|null $phone phone number of Contact
+     * @param string|null $fax fax number of Contact
+     * @param string|null $uid UID for the Contact
+     * @param array $customField custom fields passed as associative array. Keys represent the field names while values represent the values
+     * @param array $addTags tags to add to the contact. Simple array of tag names
+     * @param array $removeTags tags to remove from the contact. Simple array of tag names
+     * @param bool $removeFromDNM set this true to subscribe contact to the list, and remove it from DNM)
+     * @param bool $subscribe set this true to subscribe contact to the list; false otherwise
+     * @return OperationResult
+     */
+    public function updateForListAndContact(
+        int $listId,
+        int $contactId,
+        string $email,
+        string $firstName = null,
+        string $lastName = null,
+        string $phone = null,
+        string $fax = null,
+        string $uid = null,
+        array $customField = [],
+        array $addTags = [],
+        array $removeTags = [],
+        bool $removeFromDNM = true,
+        bool $subscribe = true
+    ): OperationResult
+    {
+        $contact = [
+            'email' => $email,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'phone' => $phone,
+            'fax' => $fax,
+            'uid' => $uid,
+            'custom_field' => $customField,
+            'add_tags' => $addTags,
+            'remove_tags' => $removeTags,
+            'subscribe' => $subscribe,
+            'remove_from_dnm' => $removeFromDNM,
+        ];
+        $contact = $this->_discardNullAndEmptyValues($contact);
+
+        $overrideResource = "lists/{$listId}";
+
+        $object = new \stdClass();
+        $object->contact = (object)$contact;
+        return $this->_put('contacts/'.$contactId, [], $object, $overrideResource);
     }
 
     /**

@@ -216,21 +216,56 @@ The specific APIs contained are:
 #### Available methods:
 
  - `getForEmail(string $email)`
-     * Gets the contact according to email address 
-     * `$email`: Email address of the contact
+   * Gets the contact according to email address 
+   * `$email`: email address of the contact
 
  - `getOpens(int $contactId, int $page)`
-   * Gets a list of opens for the specified contact
+   * Gets the list of opens for the specified contact
    - `$page`: page # (>= 1). Up to 200 records returned per page.
 
  - `getClicks(int $contactId, int $page)`
-   * Get a list of clicks for the specified contact
+   * Gets the list of clicks for the specified contact
    - `$page`: page # (>= 1). Up to 200 records returned per page.
 
  - `getForList(int $listId, int $page)`
-   * Get the list of contacts for the specified list
+   * Gets the list of contacts for the specified list
    - `$page`: page # (>= 1). Up to 200 records returned per page.
 
+ - `getContactForList(int $listId, int $contactId)`
+   - Gets the specified contact from the specified list
+   - `$listId`
+   - `$contactId`
+
+ - `public function updateForListAndContact(
+        int $listId,
+        int $contactId,
+        string $email,
+        string $firstName = null,
+        string $lastName = null,
+        string $phone = null,
+        string $fax = null,
+        string $uid = null,
+        array $customField = [],
+        array $addTags = [],
+        array $removeTags = [],
+        bool $removeFromDNM = true,
+        bool $subscribe = true
+    )`
+     * Creates a contact within a list. Updates if previous contact is matched by email
+     * `$listId`: ID of the list to which the contact being updated belongs
+     * `$contactId`: ID of the contact being updated
+     * `$email`: Email address for the contact to be updated
+     * `$firstName`: first name of Contact
+     * `$lastName`: last name of Contact
+     * `$phone`: phone number of Contact
+     * `$fax`: fax number of Contact
+     * `$uid`: UID for the Contact
+     * `$customField`: custom fields passed as associative array. Keys represent the field names while values represent the values
+     * `$addTags`: tags to add to the contact. Simple array of tag names
+     * `$removeTags`: tags to remove from the contact. Simple array of tag names
+     * `$removeFromDNM`: set this true to subscribe contact to the list, and remove it from DNM)
+     * `$subscribe`: set this true to subscribe contact to the list; false otherwise
+  
  - `createOrUpdateForList(
         int $listId,
         string $email,
@@ -546,6 +581,10 @@ set.
  - `get(int $page)`
    - returns the list of reports
    - `$page`: page # (>= 1). Up to 200 records returned per page.
+
+ - `getReport(int $id)`
+   - Gets the list of reports
+   - `$id`: report ID
 
  - `getOpens(
         int $page,
