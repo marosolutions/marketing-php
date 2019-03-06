@@ -122,7 +122,7 @@ class Journeys
 	public function pauseJourneyForUid(int $journeyId, string $uid) : OperationResult
 	{
 	    $params["uid"] = $uid;
-        $result = $this->_put($journeyId."/stop", $params);
+        $result = $this->_put($journeyId."/stop/uid", $params);
         return $result;
 	}
 
@@ -151,7 +151,7 @@ class Journeys
 	public function resetJourneyForUid(int $journeyId, string $uid) : OperationResult
 	{
 	    $params["uid"] = $uid;
-        $result = $this->_put($journeyId."/reset", $params);
+        $result = $this->_put($journeyId."/reset/uid", $params);
 		return $result;
 	}
 
