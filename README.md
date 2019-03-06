@@ -34,19 +34,19 @@ service, execute:
 
     $reports = new Maropost.Api.Reports($myAccountId, $myAuthToken);
     $result = $reports.get();
-    if ($result.isSuccess()) {
+    if ($result.isSuccess) {
         $myReports = $result.getData();
     }
 
 The result object contains three fields:
 
-- `isSuccess` boolean
-- `errorMessage` string
-- `exception` Exception
+- `isSuccess` (boolean)
+- `errorMessage` (string)
+- `exception` (Exception)
 
 If `isSuccess` is `false`, then `errorMessage` will contain information, and
 `exception` *might* contain an exception, depending upon the reason for
-failure. If there is an exception, then `isSuccess` will always be false.
+failure. If `exception` is not `null`, then `isSuccess` will always be `false`.
 
 The object also contains one function, `getData()`, which contains whatever
 data the operation itself provides. Some operations, such as `delete()`
