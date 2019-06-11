@@ -38,12 +38,12 @@ class AbTestCampaigns
      * ['en' for English, 'es' for Spanish, 'de' for German, 'it' for Italian, 'fr' for French, 'pt' for Portuguese, 'pl' for Polish, 'da' for Danish, 'zh' for Chinese, 'nl' for Dutch, 'sv' for Swedish, 'no' for Norwegian]
      * @param array $campaignGroupsAttributes
      * @param string $commit Allowed values for commit: 'Save as Draft' or 'Send Test' or 'Schedule'
-     * @param string|null $sendAt send_at should be in "yyyy-mm-dd %H:%M:%S" where %H - Hour of the day, 24-hour clock (00..23), %M - Minute of the hour (00..59), %S - Second of the minute (00..60)
+     * @param \DateTime|null $sendAt
      * @param int|null $brandId
      * @param array $suppressedListIds
      * @param array $suppressedSegmentIds
      * @param array $suppressedJourneyIds
-     * @param int|null $emailPreviewLink
+     * @param int|null $emailPreviewLink Allowed values: 1- email the preview link, 0- do not email the preview link
      * @param string|null $decidedBy Allowed values for decided_by: ('TopChoice' for Top Choices) or
      * ('Opens' for Highest Open Rate) or ('Clicks' for Highest Click Rate) or ('Manual' for Manual Selection) or
      * ('click_to_open' for Highest Click-to-Open Rate) or ('conversions' for Highest Conversion Rate)
@@ -111,7 +111,7 @@ class AbTestCampaigns
      * @param string $language
      * @param array $campaignGroupsAttributes
      * @param string $commit
-     * @param string|null $sendAt
+     * @param \DateTime|null $sendAt
      * @param int|null $brandId
      * @param array $suppressedListIds
      * @param array $suppressedSegmentIds

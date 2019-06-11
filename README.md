@@ -116,7 +116,11 @@ The specific APIs contained are:
 #### Available Methods:
  - `createAbTest(string $name, string $fromEmail, string $replyTo,
             string $address, string $language, array $campaignGroupsAttributes,
-            string $sendAt)`
+            string commit, \DateTime $sendAt, int $brandId = null,
+              array $suppressedListIds = [], array $suppressedSegmentIds = [],
+              array $suppressedJourneyIds = [], int $emailPreviewLink = null,
+              string $decidedBy = null, array $lists = [],
+              array $cTags = [], array $segments = [])`
    - `$name`: name of the new campaign
    - `$fromEmail`: default sender email address for campaign emails
    - `$replyTo`: default reply-to email address for campaign emails
@@ -128,9 +132,20 @@ The specific APIs contained are:
      - `content_id`: content ID
      - `subject`: subject line of emails
      - `from_name`: "from name" on emails
-     - `percentage`: percentage of emails that should be sent with these
-     settings.
-   - `$sendAt`: DateTime string having the format  YYYY-MM-DDTHH:MM:SS-05:00
+     - `percentage`: percentage of emails that should be sent with these settings.
+     - `preheader`:
+     - `send_at`: string to represent DateTime, having the format `YYYY-MM-DD HH:mm:ss`
+   - `$commit`: allowed values: 'Save as Draft' or 'Send Test' or 'Schedule'
+   - `$sendAt`: DateTime object representing the start of the AB campaign
+   - `$brandId`: brand ID as a string
+   - `$suppressedListIds`: array of list IDs (in string format)
+   - `$suppressedSegmentIds`: array of segment IDs (in string format)
+   - `$suppressedJourneyIds`: array of journey IDs (in string format)
+   - `$emailPreviewLink`: 1 (true) to email the preview link. 0 (false) otherwise.
+   - `$decidedBy`: allowed values: ('TopChoice' for Top Choices) or ('Opens' for Highest Open Rate) or ('Clicks' for Highest Click Rate) or ('Manual' for Manual Selection) or ('click_to_open' for Highest Click-to-Open Rate) or ('conversions' for Highest Conversion Rate)
+   - `$lists`: array of targeted list IDs (in string format)
+   - `$cTags`: array of tags in string format
+   - `$segments`: array of targeted segment IDs (in string format)
 
 ### Transactional Campaigns
 
