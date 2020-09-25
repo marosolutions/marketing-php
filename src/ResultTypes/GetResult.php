@@ -23,7 +23,14 @@ class GetResult extends OperationResult
         }
         else {
             $this->data = $apiResponse->body;
-            $this->errorMessage = !empty($this->errorMessage) ? $this->errorMessage : isset($apiResponse->body->error) ? $apiResponse->body->error : '';
+            if(empty($this->errorMessage)) {
+                if(isset($apiResponse->body->error)) {
+                    $this->errorMessage = $apiResponse->body->error;
+                } else {
+                    $this->errorMessage = '';
+                }
+            }
+            
             if ($apiResponse->code >= 200 && $apiResponse->code < 300) {
                 $this->isSuccess = (strlen($this->errorMessage) == 0);
             }
