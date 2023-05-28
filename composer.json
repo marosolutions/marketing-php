@@ -3,7 +3,7 @@
   "description": "This package forks the package which provides programmatic access to several Maropost services.",
   "version": "1.0.0",
   "require": {
-    "php": "^7.0",
+    "php": "^7.0|^8.0",
     "nategood/httpful": "~0.2.20"
   },
   "autoload": {
