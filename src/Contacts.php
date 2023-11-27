@@ -416,4 +416,79 @@ class Contacts
         return $this->_put('unsubscribe_all', $params);
     }
 
+    /**
+     * @return OperationResult
+     */
+    public function getAllLists(): OperationResult {
+        $params = array(
+            'no_counts' => true,
+        );
+
+        return $this->_get( '', $params, 'lists' );
+    }
+
+    public function updateContact( $id, $args ): OperationResult {
+        $params = array(
+            'id' => $id,
+        );
+
+        return $this->_put( 'contacts', $params, (object) $args );
+    }
+
+    public function getAllBrands(): OperationResult {
+        $params = array(
+            'no_counts' => true,
+        );
+
+        return $this->_get( '', $params, 'brands' );
+    }
+
+    public function unsubscribe_by_id($contact_id, $params): OperationResult {
+
+        return $this->_delete('contacts/'.$contact_id, $params, '');
+    }
+
+    public function get_contact_by_id($id): OperationResult {
+
+        return $this->_get('contacts/'.$id, [], '');
+    }
+
+    public function do_not_mail($email){
+        $obj = (object) array(
+            'global_unsubscribe' => array(
+                'email' => $email
+            ),
+        );
+
+        return $this->_post('global_unsubscribes', [], $obj, '');
+
+    }
+
+    public function remove_from_do_not_mail($email){
+
+        return $this->_delete('delete', ['email' => $email], 'global_unsubscribes', null);
+
+    }
+
+    public function get_do_not_mail($email){
+
+        return $this->_get('email', ['contact[email]' => $email], 'global_unsubscribes');
+
+    }
+
+    public function subscribe_multiple($email, $list_ids){
+
+        $obj = (object) array(
+            'contact' => array(
+                'email' => $email
+            ),
+        );
+        $params = array(
+            'list_ids' => $list_ids,
+        );
+
+        return $this->_post('contacts', $params, $obj, '');
+
+    }
+
 }
